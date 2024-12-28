@@ -1,6 +1,15 @@
 import os
 from pathlib import Path
-import dj_database_url
+import environ
+import pymysql
+pymysql.install_as_MySQLdb()
+
+
+# Initialize environment variables
+env = environ.Env()
+environ.Env.read_env()
+
+JAWSDB_URL="mysql://mebl1wnhamn7inwn:yol5w10i95vat85h@zwgaqwfn759tj79r.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/lujrf9ah5otba4i7"
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -48,9 +57,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'restaurant_reservations.wsgi.application'
 
-# Heroku
+# MySQL
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    'default': env.db(
+        'JAWSDB_URL',
+        default='sqlite:///db.sqlite3'
+    )
 }
 
 AUTH_PASSWORD_VALIDATORS = [
