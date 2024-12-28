@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'CHANGE_ME_TO_A_SECURE_KEY'
 DEBUG = True  # Turn off in production
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['booking-system-deployment-eda028bd58dc.herokuapp.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
