@@ -1,15 +1,13 @@
-# Python
+# Python cache
 __pycache__/
 *.py[cod]
 
 # Virtual environment
 venv/
 
-# Django stuff
+# Django database
 db.sqlite3
 
-# macOS
+# macOS and Windows
 .DS_Store
-
-# Windows
 Thumbs.db

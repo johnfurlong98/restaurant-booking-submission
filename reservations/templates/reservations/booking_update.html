@@ -1,17 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Update Booking</title>
-</head>
-<body>
-  <h1>Update Booking</h1>
-  <p><a href="{% url 'booking_list' %}">My Bookings</a></p>
-  <hr>
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Update</button>
-  </form>
-</body>
-</html>
+{% extends 'reservations/base.html' %}
+{% block title %}Update Booking{% endblock %}
+{% block content %}
+<h1>Update Booking</h1>
+<p>You can only update your own booking or do so as staff.</p>
+<hr>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">Update</button>
+  <a href="{% url 'booking_list' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

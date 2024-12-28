@@ -1,24 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Booking Detail</title>
-</head>
-<body>
-  <h1>Booking Detail</h1>
-  <p><a href="{% url 'booking_list' %}">Back to My Bookings</a></p>
-  <hr>
-  <ul>
-    <li><strong>Name:</strong> {{ booking.name }}</li>
-    <li><strong>Email:</strong> {{ booking.email }}</li>
-    <li><strong>Phone:</strong> {{ booking.phone }}</li>
-    <li><strong>Date/Time:</strong> {{ booking.reservation_date }}</li>
-    <li><strong>Guests:</strong> {{ booking.number_of_guests }}</li>
-    <li><strong>Requests:</strong> {{ booking.special_requests }}</li>
-  </ul>
-  <p>
-    <a href="{% url 'booking_update' booking.pk %}">Edit Booking</a> | 
-    <a href="{% url 'booking_delete' booking.pk %}">Delete Booking</a>
-  </p>
-</body>
-</html>
+{% extends 'reservations/base.html' %}
+{% block title %}Booking Detail{% endblock %}
+{% block content %}
+<h1>Booking Detail</h1>
+<hr>
+<div class="card p-3 mb-3">
+  <strong>Name:</strong> {{ booking.name }}<br>
+  <strong>Email:</strong> {{ booking.email }}<br>
+  <strong>Phone:</strong> {{ booking.phone }}<br>
+  <strong>Date/Time:</strong> {{ booking.reservation_date|date:"Y-m-d H:i" }}<br>
+  <strong>Guests:</strong> {{ booking.number_of_guests }}<br>
+  <strong>Special Requests:</strong> {{ booking.special_requests }}
+</div>
+<a href="{% url 'booking_update' booking.pk %}" class="btn btn-warning">Edit</a>
+<a href="{% url 'booking_delete' booking.pk %}" class="btn btn-danger">Delete</a>
+<a href="{% url 'booking_list' %}" class="btn btn-secondary">My Bookings</a>
+{% endblock %}

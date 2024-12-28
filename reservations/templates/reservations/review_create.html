@@ -1,0 +1,12 @@
+{% extends 'reservations/base.html' %}
+{% block title %}Create Review{% endblock %}
+{% block content %}
+<h1>Add a Review</h1>
+<hr>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-success">Submit Review</button>
+  <a href="{% url 'review_list' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

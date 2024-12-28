@@ -1,32 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>My Bookings</title>
-</head>
-<body>
-  <h1>My Bookings</h1>
-  <p><a href="{% url 'home' %}">Home</a> | <a href="{% url 'booking_create' %}">Create a Booking</a></p>
-  <hr>
-  {% if messages %}
-    <ul>
-      {% for message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-  {% if bookings %}
-    <ul>
-    {% for booking in bookings %}
-      <li>
-        <a href="{% url 'booking_detail' booking.pk %}">
-          {{ booking.name }} - {{ booking.reservation_date }} ({{ booking.number_of_guests }} guests)
-        </a>
-      </li>
-    {% endfor %}
-    </ul>
-  {% else %}
-    <p>You have no bookings yet.</p>
-  {% endif %}
-</body>
-</html>
+{% extends 'reservations/base.html' %}
+{% block title %}My Bookings{% endblock %}
+{% block content %}
+<h1>My Bookings</h1>
+<p>This page shows your bookings (or all if you're staff).</p>
+<hr>
+{% if bookings %}
+  {% for booking in bookings %}
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">{{ booking.name }} - {{ booking.reservation_date|date:"Y-m-d H:i" }} ({{ booking.number_of_guests }} guests)</h5>
+        <p class="card-text">Contact: {{ booking.email }} / {{ booking.phone }}</p>
+        {% if booking.user == user or user.is_staff %}
+          <a href="{% url 'booking_detail' booking.pk %}" class="btn btn-primary btn-sm">Details</a>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <p>You have no bookings or none are assigned to your account.</p>
+{% endif %}
+{% endblock %}

@@ -3,10 +3,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'CHANGE_ME_TO_A_SECURE_KEY'  # Keep secret in production
-
-DEBUG = True  # Set to False in production
-
+SECRET_KEY = 'CHANGE_ME_TO_A_SECURE_KEY'
+DEBUG = True  # Turn off in production
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
@@ -16,8 +14,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Our custom app
-    'reservations',
+    'reservations',  # our custom app
 ]
 
 MIDDLEWARE = [
@@ -35,7 +32,7 @@ ROOT_URLCONF = 'restaurant_reservations.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'reservations' / 'templates'], 
+        'DIRS': [BASE_DIR / 'reservations' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -50,7 +47,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'restaurant_reservations.wsgi.application'
 
-# Database - default to SQLite for dev
+# SQLite (Dev)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -58,7 +55,6 @@ DATABASES = {
     }
 }
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -73,15 +69,14 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
+STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Authentication Redirects
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+# For optional password reset emails:
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
