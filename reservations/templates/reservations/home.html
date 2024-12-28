@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="/static/css/style.css">
+<head>
+  <meta charset="UTF-8">
+  <title>Restaurant Booking - Home</title>
+</head>
+<body>
+  <h1>Welcome to Our Restaurant</h1>
+  {% if user.is_authenticated %}
+    <p>You are logged in as {{ user.username }}. <a href="{% url 'logout' %}">Logout</a></p>
+    <p><a href="{% url 'booking_list' %}">View My Bookings</a> | <a href="{% url 'booking_create' %}">New Booking</a></p>
+  {% else %}
+    <p><a href="{% url 'login' %}">Login</a> or <a href="{% url 'admin:index' %}">Admin Panel</a></p>
+  {% endif %}
+  <hr>
+  <p>This is the homepage for our Restaurant Booking System!</p>
+
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</body>
+</html>

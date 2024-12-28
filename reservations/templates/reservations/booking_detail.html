@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Booking Detail</title>
+</head>
+<body>
+  <h1>Booking Detail</h1>
+  <p><a href="{% url 'booking_list' %}">Back to My Bookings</a></p>
+  <hr>
+  <ul>
+    <li><strong>Name:</strong> {{ booking.name }}</li>
+    <li><strong>Email:</strong> {{ booking.email }}</li>
+    <li><strong>Phone:</strong> {{ booking.phone }}</li>
+    <li><strong>Date/Time:</strong> {{ booking.reservation_date }}</li>
+    <li><strong>Guests:</strong> {{ booking.number_of_guests }}</li>
+    <li><strong>Requests:</strong> {{ booking.special_requests }}</li>
+  </ul>
+  <p>
+    <a href="{% url 'booking_update' booking.pk %}">Edit Booking</a> | 
+    <a href="{% url 'booking_delete' booking.pk %}">Delete Booking</a>
+  </p>
+</body>
+</html>
