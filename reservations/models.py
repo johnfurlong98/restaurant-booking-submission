@@ -4,11 +4,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+
 class RestaurantSettings(models.Model):
     """
     A single row (typically) storing global restaurant settings,
     like working hours (open_time, close_time).
     """
+
     open_time = models.TimeField(
         help_text="HH:MM format for when the restaurant opens"
     )
@@ -28,6 +30,7 @@ class Table(models.Model):
     capacity: how many guests it can seat
     table_type: optional descriptor, e.g., "window seat," "booth," etc.
     """
+
     name = models.CharField(max_length=50)
     capacity = models.PositiveIntegerField()
     table_type = models.CharField(max_length=50, blank=True, null=True)
@@ -49,8 +52,13 @@ class Booking(models.Model):
       - table: optional reference to a specific Table (if required)
       - created_on: auto timestamp
     """
+
     user = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, blank=True, related_name='bookings'
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="bookings",
     )
     name = models.CharField(max_length=50)
     email = models.EmailField()
@@ -59,14 +67,17 @@ class Booking(models.Model):
     number_of_guests = models.PositiveIntegerField()
     special_requests = models.TextField(blank=True, null=True)
     table = models.ForeignKey(
-        Table, on_delete=models.SET_NULL, null=True, blank=True,
-        related_name='bookings',
-        help_text="Select a table (optional) if you want to specify a specific table."
+        Table,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="bookings",
+        help_text="Select a table (optional) if you want to specify a specific table.",
     )
     created_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['reservation_date']
+        ordering = ["reservation_date"]
 
     def __str__(self):
         return f"{self.name} - {self.reservation_date} (Guests: {self.number_of_guests})"
@@ -81,8 +92,9 @@ class Review(models.Model):
       - title, content, rating
       - created_on: auto timestamp
     """
+
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='reviews'
+        User, on_delete=models.CASCADE, related_name="reviews"
     )
     title = models.CharField(max_length=100)
     content = models.TextField()
@@ -90,7 +102,7 @@ class Review(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-created_on']
+        ordering = ["-created_on"]
 
     def __str__(self):
         return f"{self.title} by {self.user.username} (Rating: {self.rating})"

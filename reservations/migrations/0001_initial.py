@@ -15,20 +15,35 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Booking',
+            name="Booking",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('email', models.EmailField(max_length=254)),
-                ('phone', models.CharField(max_length=20)),
-                ('reservation_date', models.DateTimeField()),
-                ('number_of_guests', models.PositiveIntegerField()),
-                ('special_requests', models.TextField(blank=True, null=True)),
-                ('created_on', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='bookings', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("email", models.EmailField(max_length=254)),
+                ("phone", models.CharField(max_length=20)),
+                ("reservation_date", models.DateTimeField()),
+                ("number_of_guests", models.PositiveIntegerField()),
+                ("special_requests", models.TextField(blank=True, null=True)),
+                ("created_on", models.DateTimeField(auto_now_add=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="bookings",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'ordering': ['reservation_date'],
+                "ordering": ["reservation_date"],
             },
         ),
     ]

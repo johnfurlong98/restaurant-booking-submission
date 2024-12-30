@@ -7,30 +7,66 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('reservations', '0003_alter_booking_user'),
+        ("reservations", "0003_alter_booking_user"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='RestaurantSettings',
+            name="RestaurantSettings",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('open_time', models.TimeField(help_text='HH:MM format for when the restaurant opens')),
-                ('close_time', models.TimeField(help_text='HH:MM format for when the restaurant closes')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "open_time",
+                    models.TimeField(
+                        help_text="HH:MM format for when the restaurant opens"
+                    ),
+                ),
+                (
+                    "close_time",
+                    models.TimeField(
+                        help_text="HH:MM format for when the restaurant closes"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Table',
+            name="Table",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('capacity', models.PositiveIntegerField()),
-                ('table_type', models.CharField(blank=True, max_length=50, null=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("capacity", models.PositiveIntegerField()),
+                (
+                    "table_type",
+                    models.CharField(blank=True, max_length=50, null=True),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='booking',
-            name='table',
-            field=models.ForeignKey(blank=True, help_text='Select a table (optional) if you want to specify a specific table.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='bookings', to='reservations.table'),
+            model_name="booking",
+            name="table",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="Select a table (optional) if you want to specify a specific table.",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="bookings",
+                to="reservations.table",
+            ),
         ),
     ]
