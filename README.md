@@ -53,6 +53,240 @@ A Django-based web application allowing customers to:
 1. **Booking**: (id, user, name, email, phone, reservation_date, number_of_guests, special_requests, created_on)
 2. **Review**: (id, user, title, content, rating, created_on)
 
+# Wireframes Documentation
+
+## Overview
+
+This section provides an overview of the wireframes for the **Restaurant Booking System**. Wireframes are essential for visualizing the layout, structure, and user interactions within the application. Below are the key wireframes that outline the primary screens and their functionalities.
+
+## Wireframes Overview
+
+- **Homepage**
+- **Booking Creation**
+- **User Registration**
+- **User Login**
+- **Booking List**
+- **Reviews Page**
+
+## Wireframe Screens
+
+### 1. Homepage
+
+![Homepage Wireframe](./images/homepage.png)
+
+**Description:**
+The homepage serves as the entry point for users. It features the navigation bar with links to key sections such as "Make a Booking," "Reviews," "Login," and "Sign Up." The main area highlights the restaurant's offerings and includes a call-to-action button for creating a new booking.
+
+**Key Elements:**
+- Navigation Bar
+- Hero Section with Call-to-Action
+- Overview of Services
+- Footer with Contact Information
+
+---
+
+### 2. Booking Creation
+
+![Booking Creation Wireframe](./images/booking_create.png)
+
+**Description:**
+This screen allows users to create a new booking. The form includes fields for name, email, phone number, reservation date, number of guests, special requests, and table selection. Validation messages ensure users provide the necessary information.
+
+**Key Elements:**
+- Booking Form
+- Input Fields with Labels
+- Submit and Cancel Buttons
+- Optional Table Selection Dropdown
+
+---
+
+### 3. User Registration
+
+![User Registration Wireframe](./images/user_registration.png)
+
+**Description:**
+The registration page enables new users to sign up for an account. It includes fields for username, email, password, and password confirmation. Clear instructions and validation feedback guide users through the registration process.
+
+**Key Elements:**
+- Registration Form
+- Input Fields with Labels
+- Password Requirements
+- Register and Cancel Buttons
+
+---
+
+### 4. User Login
+
+![User Login Wireframe](./images/user_login.png)
+
+**Description:**
+This screen allows existing users to log into their accounts. It includes fields for email and password, along with options to remember the user and links for password recovery.
+
+**Key Elements:**
+- Login Form
+- Input Fields with Labels
+- Remember Me Checkbox
+- Login and Forgot Password Links
+
+---
+
+### 5. Booking List
+
+![Booking List Wireframe](./images/booking_list.png)
+
+**Description:**
+After logging in, users can view a list of their existing bookings. Each booking entry displays key details and provides options to view, edit, or cancel the booking.
+
+**Key Elements:**
+- List of Bookings
+- Booking Details (Name, Date, Guests, etc.)
+- Action Buttons (View, Edit, Cancel)
+
+---
+
+### 6. Reviews Page
+
+![Reviews Page Wireframe](./images/reviews_page.png)
+
+**Description:**
+The reviews page showcases feedback from customers. Users can read existing reviews and, if logged in, submit their own. The layout ensures readability and easy navigation through different reviews.
+
+**Key Elements:**
+- List of Customer Reviews
+- Review Submission Form
+- Pagination or Scroll for Multiple Reviews
+
+---
+
+## How to Use These Wireframes
+
+1. **Reference During Development:** Use these wireframes as a blueprint to guide the development of each page, ensuring consistency and alignment with the initial design vision.
+2. **User Feedback:** Share wireframes with stakeholders or potential users to gather feedback and make iterative improvements before full-scale development.
+3. **Design Iterations:** Update wireframes as the project evolves to reflect changes in functionality or design preferences.
+
+## Tools Used for Wireframing
+
+- **Figma:** For creating interactive and collaborative wireframes.
+- **Adobe XD:** For detailed design and prototyping.
+- **Balsamiq:** For quick and low-fidelity wireframe sketches.
+
+## Conclusion
+
+Documenting wireframes is a crucial step in the development process, providing a clear visual guide for both designers and developers. These wireframes ensure that the **Restaurant Booking System** delivers a user-friendly and efficient experience.
+
+---
+
+*Images are stored in the `./images/` directory. Ensure that all image paths are correct relative to the README file location.*
+
+# Wireframes Documentation
+
+## Overview
+
+This section provides an overview of the wireframes for the **Restaurant Booking System**. Wireframes are essential for visualizing the layout, structure, and user interactions within the application. Below are the key wireframes that outline the primary screens and their functionalities.
+
+## Wireframes Overview
+
+- **Homepage**
+- **Booking Creation**
+- **User Registration**
+- **User Login**
+- **Booking List**
+- **Reviews Page**
+
+## Wireframe Screens
+
+### 1. Homepage
+
+![Homepage Wireframe](./images/homepage.png)
+
+**Description:**
+The homepage serves as the entry point for users. It features the navigation bar with links to key sections such as "Create a Booking," "Reviews," "Login," and "Sign Up." The main area highlights the restaurant's offerings and includes a call-to-action button for creating a new booking.
+
+**Key Elements:**
+- Navigation Bar
+- Hero Section with Call-to-Action
+- Overview of Services
+
+---
+
+### 2. Booking Creation
+
+![Booking Creation Wireframe](./images/bookingcreation.png)
+
+**Description:**
+This screen allows users to create a new booking. The form includes fields for name, email, phone number, reservation date, number of guests, special requests, and table selection. Validation messages ensure users provide the necessary information.
+
+**Key Elements:**
+- Booking Form
+- Input Fields with Labels
+- Submit and Cancel Buttons
+- Optional Table Selection Dropdown
+
+---
+
+### 3. User Signup
+
+![User Registration Wireframe](./images/signup.png)
+
+**Description:**
+The registration page enables new users to sign up for an account. It includes fields for username, email, password, and password confirmation. Clear instructions and validation feedback guide users through the registration process.
+
+**Key Elements:**
+- Registration Form
+- Input Fields with Labels
+- Password Requirements
+- Register and Cancel Buttons
+
+---
+
+### 4. My Booking 
+
+![Booking List Wireframe](./images/mybookings.png)
+
+**Description:**
+After logging in, users can view a list of their existing bookings. Each booking entry displays key details and provides options to view, edit, or cancel the booking.
+
+**Key Elements:**
+- List of Bookings
+- Booking Details (Name, Date, Guests, etc.)
+- Action Buttons (View, Edit, Cancel)
+
+---
+
+### 5. Reviews Page
+
+![Reviews Page Wireframe](./images/reviews.png)
+
+**Description:**
+The reviews page showcases feedback from customers. Users can read existing reviews and, if logged in, submit their own. The layout ensures readability and easy navigation through different reviews.
+
+**Key Elements:**
+- List of Customer Reviews
+- Review Submission Form
+- Pagination or Scroll for Multiple Reviews
+
+---
+
+## How to Use These Wireframes
+
+1. **Reference During Development:** Use these wireframes as a blueprint to guide the development of each page, ensuring consistency and alignment with the initial design vision.
+2. **User Feedback:** Share wireframes with stakeholders or potential users to gather feedback and make iterative improvements before full-scale development.
+3. **Design Iterations:** Update wireframes as the project evolves to reflect changes in functionality or design preferences.
+
+## Tools Used for Wireframing
+
+- **wireframe.cc:** For creating interactive and collaborative wireframes.
+
+## Conclusion
+
+Documenting wireframes is a crucial step in the development process, providing a clear visual guide for both designers and developers. These wireframes ensure that the **Restaurant Booking System** delivers a user-friendly and efficient experience.
+
+---
+
+*Images are stored in the `./images/` directory. Ensure that all image paths are correct relative to the README file location.*
+
+
+
 ## Testing
 
 ## Django Automated Tests
