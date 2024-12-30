@@ -4,18 +4,11 @@ import environ
 import pymysql
 pymysql.install_as_MySQLdb()
 
-
-# Initialize environment variables
-env = environ.Env()
-environ.Env.read_env()
-
-JAWSDB_URL="mysql://mebl1wnhamn7inwn:yol5w10i95vat85h@zwgaqwfn759tj79r.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/lujrf9ah5otba4i7"
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'CHANGE_ME_TO_A_SECURE_KEY'
 DEBUG = True  # Turn off in production
-ALLOWED_HOSTS = ['booking-system-deployment-eda028bd58dc.herokuapp.com']
+ALLOWED_HOSTS = ['booking-system-deployment-eda028bd58dc.herokuapp.com','127.0.0.1', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -58,10 +51,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'restaurant_reservations.wsgi.application'
 
 # MySQL
+# Initialize environment variables
+env = environ.Env()
+environ.Env.read_env()
+
 DATABASES = {
     'default': env.db(
-        'JAWSDB_URL',
-        default='sqlite:///db.sqlite3'
+        'JAWSDB_URL',  # Use JAWSDB_URL from Heroku
+        default='sqlite:///db.sqlite3'  # Fallback for local development
     )
 }
 
