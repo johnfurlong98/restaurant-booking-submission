@@ -1,4 +1,11 @@
-# Improved Restaurant Booking System
+# Restaurant Booking System
+
+### GitHub Repository
+
+You can find the source code for this project in the GitHub repository:
+
+[**GitHub Repository**](https://github.com/johnfurlong98/restaurant-booking-submission)
+
 
 A Django-based web application allowing customers to:
 - Register, log in, and log out
@@ -385,12 +392,67 @@ browser = await puppeteer.launch({
 });
 
 
-## Deployment
-1. Use `requirements.txt` and `Procfile` if deploying to Heroku.
-2. Set `DEBUG=False` in environment for production.
-3. Document your steps for the assessor.
+## Deployment on Heroku
+
+This section provides step-by-step instructions for deploying the **Restaurant Booking System** on Heroku. Follow these steps to set up and deploy your Django application successfully.
+
+### Prerequisites
+
+Before deploying to Heroku, ensure the following:
+
+- [**Heroku**] (https://booking-system-deployment-eda028bd58dc.herokuapp.com/)
+
+- Heroku CLI is installed on your system.
+- Project is fully configured and tested locally.
+
+---
+
+### Step-by-Step Guide
+
+#### 1. Install Required Packages
+
+Add necessary packages for Heroku deployment:
+
+```bash
+pip install gunicorn dj-database-url psycopg2-binary django-heroku
+
+
+## Creating a Superuser
+
+A **superuser** in Django has full access to the admin interface, allowing you to manage all aspects of the **Restaurant Booking System**. This includes managing users, bookings, reviews, and other critical data.
+
+### Prerequisites
+
+Before creating a superuser, ensure that:
+
+- **Python** (version 3.8 or higher) is installed on your system.
+- **Django** is installed and your project is properly set up.
+- **Database Migrations** have been applied to set up the necessary database tables.
+
+### Step-by-Step Guide
+
+#### 1. Navigate to Your Project Directory
+
+Open your terminal or command prompt and navigate to the root directory of your Django project (where `manage.py` is located).
+
+
+cd C:\Users\furlo\Documents\booking-system
+
+### Open terminal and run 
+1 cd C:\Users\furlo\Documents\booking-system
+2 python manage.py migrate
+3 python manage.py createsuperuser
+
+- You will be prompted to enter the following information:
+
+Username: (e.g., admin)
+Email address: (e.g., admin@example.com)
+Password: (Enter a strong password)
+Password confirmation: (Re-enter the password)
+
 
 ## Credits
 - [Django docs](https://docs.djangoproject.com/)
 - Code Institute walkthroughs and community tips
 - Bootstrap 5 from [https://getbootstrap.com](https://getbootstrap.com)
+- chatgpt
