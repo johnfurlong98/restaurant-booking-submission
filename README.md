@@ -54,8 +54,36 @@ A Django-based web application allowing customers to:
 2. **Review**: (id, user, title, content, rating, created_on)
 
 ## Testing
-- We have basic Django unit tests in `reservations/tests.py`.
-- Manual testing includes verifying success messages upon creating/updating/deleting bookings and reviews.
+
+## Django Automated Tests
+
+### Overview
+
+This project includes automated tests using Django's built-in testing framework to ensure the reliability and correctness of the restaurant booking application. The tests cover both **model** and **view** functionalities, verifying that critical components behave as expected.
+
+### Test Structure
+
+- **Model Tests**: Ensure that the data models behave correctly.
+- **View Tests**: Verify that views handle requests and responses properly.
+
+### Prerequisites
+
+- **Python** (version 3.8 or higher recommended)
+- **Django** installed and properly configured
+- **Database** migrations applied
+
+### Running the Tests
+
+1. **Navigate to the Project Directory**:
+    ```bash
+    cd C:\Users\furlo\Documents\booking-system
+    ```
+
+2. **Run the Tests Using Django's Test Runner**:
+    ```bash
+    python manage.py test
+    ```
+    - This command discovers and runs all tests within your Django applications.
 
 ## End-to-End (E2E) Tests with Jest & Puppeteer
 
