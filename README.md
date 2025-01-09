@@ -390,7 +390,7 @@ browser = await puppeteer.launch({
   headless: false, // Set to false to see the browser
   slowMo: 50,       // Slows down Puppeteer operations by 50ms
 });
-
+```
 
 ## Deployment on Heroku
 
@@ -415,7 +415,7 @@ Add necessary packages for Heroku deployment:
 
 ```bash
 pip install gunicorn dj-database-url psycopg2-binary django-heroku
-
+```
 
 ## Creating a Superuser
 
@@ -435,13 +435,23 @@ Before creating a superuser, ensure that:
 
 Open your terminal or command prompt and navigate to the root directory of your Django project (where `manage.py` is located).
 
-
+```bash
 cd C:\Users\furlo\Documents\booking-system
+```
 
 ### Open terminal and run 
-1 cd C:\Users\furlo\Documents\booking-system
-2 python manage.py migrate
-3 python manage.py createsuperuser
+Step 1 
+```bash
+cd C:\Users\furlo\Documents\booking-system
+```
+Step 2 
+```bash
+python manage.py migrate
+```
+Step 3
+```bash
+python manage.py createsuperuser
+```
 
 - You will be prompted to enter the following information:
 
@@ -449,6 +459,8 @@ Username: (e.g., admin)
 Email address: (e.g., admin@example.com)
 Password: (Enter a strong password)
 Password confirmation: (Re-enter the password)
+
+## Known Issues and Future Improvements
 
 
 ## Credits
