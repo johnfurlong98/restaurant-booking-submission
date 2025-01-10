@@ -71,9 +71,8 @@ This section provides an overview of the wireframes for the **Restaurant Booking
 
 - **Homepage**
 - **Booking Creation**
-- **User Registration**
-- **User Login**
-- **Booking List**
+- **User Signup**
+- **My Booking**
 - **Reviews Page**
 
 ## Wireframe Screens
