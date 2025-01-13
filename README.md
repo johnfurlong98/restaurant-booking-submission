@@ -65,7 +65,7 @@ A Django-based web application allowing customers to:
 
 ## Overview
 
-This section provides an overview of the wireframes for the **Restaurant Booking System**. Wireframes are essential for visualizing the layout, structure, and user interactions within the application. Below are the key wireframes that outline the primary screens and their functionalities.
+This section provides an overview of the wireframes for the **Restaurant Booking System**. Wireframes are essential for visualizing the layout, structure, and user interactions within the application. Below are the key wireframes that outline the primary screens and their functionalities. The login page was not planned in wireframes as I used a very basic standard login design.
 
 ## Wireframes Overview
 
@@ -342,6 +342,8 @@ Password confirmation: (Re-enter the password)
 
 ## Known Issues and Future Improvements
 
+### Admin-Assisted Registration for Staff
+- Below the login field on the restaurant booking site's login page, there is a link labeled "Ask admin to register you?". This feature was intended to allow the admin to log in and register new users specifically for staff accounts. While the feature is functional and restricted to admin access, it remains an unfinished part of the project. It lacks proper CSS styling and is not designed for use by the average user. As such, it currently serves as a basic implementation without the polished appearance and functionality planned for future iterations.
 
 ## Credits
 - [Django docs](https://docs.djangoproject.com/)
