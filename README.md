@@ -267,6 +267,11 @@ browser = await puppeteer.launch({
 });
 ```
 
+## Validation 
+
+- All HTML and CSS files were validated using the W3C Markup Validation Service and the W3C CSS Validator.
+- Python code that is consistent in style and conforms to the PEP8 style guide.
+
 ## Deployment on Heroku
 
 This section provides step-by-step instructions for deploying the **Restaurant Booking System** on Heroku. Follow these steps to set up and deploy your Django application successfully.
