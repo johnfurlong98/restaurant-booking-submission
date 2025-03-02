@@ -3,6 +3,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from datetime import timedelta
 
 
 class RestaurantSettings(models.Model):
@@ -34,6 +35,27 @@ class Table(models.Model):
     name = models.CharField(max_length=50)
     capacity = models.PositiveIntegerField()
     table_type = models.CharField(max_length=50, blank=True, null=True)
+
+    def is_available(self, check_date, duration_minutes=120):
+        """
+        Check if the table is available at the given date/time.
+        By default, checks for 2-hour window around the requested time.
+        """
+        # Convert check_date to UTC if it's not already
+        if timezone.is_naive(check_date):
+            check_date = timezone.make_aware(check_date)
+        
+        # Define the time window
+        start_time = check_date - timedelta(minutes=duration_minutes/2)
+        end_time = check_date + timedelta(minutes=duration_minutes/2)
+        
+        # Check for overlapping bookings
+        overlapping_bookings = self.bookings.filter(
+            reservation_date__gt=start_time,
+            reservation_date__lt=end_time
+        ).exists()
+        
+        return not overlapping_bookings
 
     def __str__(self):
         type_str = self.table_type or "N/A"
@@ -106,3 +128,40 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.title} by {self.user.username} (Rating: {self.rating})"
+
+
+class MenuCategory(models.Model):
+    """
+    Categories for menu items (e.g., Starters, Main Course, Desserts)
+    """
+    name = models.CharField(max_length=50)
+    description = models.TextField(blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        verbose_name_plural = "Menu Categories"
+        ordering = ["order", "name"]
+
+    def __str__(self):
+        return self.name
+
+
+class MenuItem(models.Model):
+    """
+    Individual menu items with prices and descriptions
+    """
+    category = models.ForeignKey(MenuCategory, related_name="items", on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    is_vegetarian = models.BooleanField(default=False)
+    is_vegan = models.BooleanField(default=False)
+    is_gluten_free = models.BooleanField(default=False)
+    is_available = models.BooleanField(default=True)
+    image = models.ImageField(upload_to='menu_items/', blank=True, null=True)
+
+    class Meta:
+        ordering = ["category", "name"]
+
+    def __str__(self):
+        return f"{self.name} (£{self.price})"

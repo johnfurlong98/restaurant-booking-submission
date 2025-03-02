@@ -10,10 +10,16 @@ from .views import (
     ReviewCreateView,
     ReviewDeleteView,
     register_user,
+    MenuView,
+    admin_dashboard,
 )
 
 urlpatterns = [
     path("", home, name="home"),
+    # Admin
+    path("admin/dashboard/", admin_dashboard, name="admin_dashboard"),
+    # Menu
+    path("menu/", MenuView.as_view(), name="menu"),
     # Bookings
     path("bookings/", BookingListView.as_view(), name="booking_list"),
     path(

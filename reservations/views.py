@@ -9,11 +9,20 @@ from django.views.generic import (
     CreateView,
     UpdateView,
     DeleteView,
+    TemplateView,
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login
-from .models import Booking, Review
+from .models import Booking, Review, MenuCategory, MenuItem, Table
 from .forms import BookingForm, ReviewForm, CustomUserCreationForm
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.models import User
+from django.db.models import Avg, Count
+from django.utils import timezone
+from datetime import timedelta
 
 
 def home(request):
@@ -188,6 +197,7 @@ class ReviewDeleteView(LoginRequiredMixin, DeleteView):
 # ==============
 #   USER REGISTRATION
 # ==============
+@ensure_csrf_cookie
 def register_user(request):
     """
     A simple registration view that allows any user to sign up without admin approval.
@@ -212,3 +222,63 @@ def register_user(request):
     else:
         form = CustomUserCreationForm()
     return render(request, "reservations/register.html", {"form": form})
+
+
+class MenuView(TemplateView):
+    """
+    Display the restaurant menu organized by categories
+    """
+    template_name = "reservations/menu.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = MenuCategory.objects.prefetch_related('items').all()
+        return context
+
+
+@staff_member_required
+def admin_dashboard(request):
+    """
+    Admin dashboard showing key statistics and recent activity
+    """
+    # Calculate statistics
+    total_bookings = Booking.objects.count()
+    todays_bookings = Booking.objects.filter(
+        reservation_date__date=timezone.now().date()
+    ).count()
+    total_users = User.objects.count()
+    avg_rating = Review.objects.aggregate(Avg('rating'))['rating__avg'] or 0
+
+    # Get bookings for the next 7 days
+    next_week = timezone.now() + timedelta(days=7)
+    upcoming_bookings = Booking.objects.filter(
+        reservation_date__range=(timezone.now(), next_week)
+    ).count()
+
+    # Get table utilization
+    table_stats = Table.objects.annotate(
+        booking_count=Count('bookings')
+    ).order_by('-booking_count')[:5]
+
+    # Get recent bookings with more details
+    recent_bookings = Booking.objects.select_related('table', 'user').order_by(
+        '-created_on'
+    )[:10]
+
+    # Get recent reviews
+    recent_reviews = Review.objects.select_related('user').order_by(
+        '-created_on'
+    )[:5]
+
+    context = {
+        'total_bookings': total_bookings,
+        'todays_bookings': todays_bookings,
+        'total_users': total_users,
+        'avg_rating': avg_rating,
+        'upcoming_bookings': upcoming_bookings,
+        'table_stats': table_stats,
+        'recent_bookings': recent_bookings,
+        'recent_reviews': recent_reviews,
+    }
+    
+    return render(request, 'reservations/admin_dashboard.html', context)

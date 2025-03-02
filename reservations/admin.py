@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Booking, Review, RestaurantSettings, Table
+from .models import Booking, Review, RestaurantSettings, Table, MenuCategory, MenuItem
 
 
 @admin.register(RestaurantSettings)
@@ -45,3 +45,32 @@ class ReviewAdmin(admin.ModelAdmin):
     list_display = ("title", "user", "rating", "created_on")
     list_filter = ("rating",)
     search_fields = ("title", "content", "user__username")
+
+
+@admin.register(MenuCategory)
+class MenuCategoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "order")
+    search_fields = ("name",)
+    ordering = ["order", "name"]
+
+
+@admin.register(MenuItem)
+class MenuItemAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "category",
+        "price",
+        "is_vegetarian",
+        "is_vegan",
+        "is_gluten_free",
+        "is_available",
+    )
+    list_filter = (
+        "category",
+        "is_vegetarian",
+        "is_vegan",
+        "is_gluten_free",
+        "is_available",
+    )
+    search_fields = ("name", "description")
+    ordering = ["category", "name"]

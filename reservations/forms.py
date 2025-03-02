@@ -89,17 +89,26 @@ class BookingForm(forms.ModelForm):
 
     def clean(self):
         """
-        Check table capacity vs. number_of_guests
+        Check table capacity vs. number_of_guests and table availability
         """
         cleaned_data = super().clean()
         table = cleaned_data.get("table")
         guests = cleaned_data.get("number_of_guests")
+        reservation_date = cleaned_data.get("reservation_date")
 
-        if table and guests:
+        if all([table, guests, reservation_date]):
+            # Check table capacity
             if guests > table.capacity:
                 raise ValidationError(
                     f"This table (capacity: {table.capacity}) can't accommodate {guests} guests."
                 )
+            
+            # Check table availability
+            if not table.is_available(reservation_date):
+                raise ValidationError(
+                    f"Sorry, this table is not available at the requested time. Please choose another table or time."
+                )
+
         return cleaned_data
 
 

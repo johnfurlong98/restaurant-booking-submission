@@ -8,12 +8,27 @@ pymysql.install_as_MySQLdb()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "CHANGE_ME_TO_A_SECURE_KEY"
-DEBUG = False  # Turn off in production
+DEBUG = True  # Enable for development
 ALLOWED_HOSTS = [
     "booking-system-deployment-eda028bd58dc.herokuapp.com",
     "127.0.0.1",
     "localhost",
 ]
+
+# Add CSRF trusted origins
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+    "https://booking-system-deployment-eda028bd58dc.herokuapp.com",
+]
+
+# Session and Cookie Settings
+SESSION_COOKIE_SECURE = False  # Set to True in production
+CSRF_COOKIE_SECURE = False    # Set to True in production
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+CSRF_USE_SESSIONS = True
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -33,6 +48,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.security.SecurityMiddleware",
 ]
 
 ROOT_URLCONF = "restaurant_reservations.urls"
@@ -92,3 +108,8 @@ LOGOUT_REDIRECT_URL = "/"
 
 # For optional password reset emails:
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# Security Settings
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'

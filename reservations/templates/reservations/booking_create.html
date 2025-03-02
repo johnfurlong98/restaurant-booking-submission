@@ -62,11 +62,7 @@
         <hr>
 
         <form method="post" novalidate>
-          <input
-            type="hidden"
-            name="csrfmiddlewaretoken"
-            value="hpC7FYCm4PIoXZJWhECsUIxHTQvk9ncoRdTzzVK7v3FHElYc9ELkEtLluAlzpraD"
-          >
+          {% csrf_token %}
 
           <!-- Name -->
           <div class="mb-3">

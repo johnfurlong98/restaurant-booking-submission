@@ -1,0 +1,238 @@
+{% extends 'reservations/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+  .admin-dashboard {
+    background-color: #f8f9fa;
+    min-height: calc(100vh - 56px);
+  }
+  
+  .stats-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+  }
+  
+  .stats-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .stats-icon {
+    font-size: 2rem;
+    color: #0d6efd;
+  }
+  
+  .quick-actions {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .action-btn {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  
+  .action-btn:hover {
+    transform: translateX(5px);
+  }
+  
+  .recent-activity {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .activity-item {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .activity-item:last-child {
+    border-bottom: none;
+  }
+
+  .table-stats {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+  }
+
+  .review-item {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  .review-item:last-child {
+    border-bottom: none;
+  }
+
+  .rating-stars {
+    color: #ffc107;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard py-4">
+  <div class="container">
+    <h1 class="mb-4">Admin Dashboard</h1>
+    
+    <!-- Stats Row -->
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="stats-card p-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h3 class="mb-0">{{ total_bookings }}</h3>
+              <p class="text-muted mb-0">Total Bookings</p>
+            </div>
+            <div class="stats-icon">
+              <i class="bi bi-calendar-check"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stats-card p-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h3 class="mb-0">{{ todays_bookings }}</h3>
+              <p class="text-muted mb-0">Today's Bookings</p>
+            </div>
+            <div class="stats-icon">
+              <i class="bi bi-clock"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stats-card p-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h3 class="mb-0">{{ upcoming_bookings }}</h3>
+              <p class="text-muted mb-0">Next 7 Days</p>
+            </div>
+            <div class="stats-icon">
+              <i class="bi bi-calendar-week"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stats-card p-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h3 class="mb-0">{{ avg_rating|floatformat:1 }}</h3>
+              <p class="text-muted mb-0">Avg. Rating</p>
+            </div>
+            <div class="stats-icon">
+              <i class="bi bi-star"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main Content Row -->
+    <div class="row">
+      <!-- Quick Actions -->
+      <div class="col-md-4">
+        <div class="quick-actions p-4 mb-4">
+          <h4 class="mb-3">Quick Actions</h4>
+          <a href="{% url 'admin:reservations_booking_add' %}" class="btn btn-primary action-btn">
+            <i class="bi bi-plus-circle me-2"></i>New Booking
+          </a>
+          <a href="{% url 'admin:auth_user_add' %}" class="btn btn-success action-btn">
+            <i class="bi bi-person-plus me-2"></i>Add User
+          </a>
+          <a href="{% url 'admin:reservations_menuitem_add' %}" class="btn btn-info action-btn">
+            <i class="bi bi-menu-button me-2"></i>Add Menu Item
+          </a>
+          <a href="{% url 'admin:reservations_table_add' %}" class="btn btn-warning action-btn">
+            <i class="bi bi-grid me-2"></i>Add Table
+          </a>
+        </div>
+
+        <!-- Table Stats -->
+        <div class="table-stats p-4">
+          <h4 class="mb-3">Table Utilization</h4>
+          {% for table in table_stats %}
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <h6 class="mb-0">{{ table.name }}</h6>
+                <small class="text-muted">Capacity: {{ table.capacity }}</small>
+              </div>
+              <span class="badge bg-primary">{{ table.booking_count }} bookings</span>
+            </div>
+          {% empty %}
+            <p class="text-muted">No table statistics available</p>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <!-- Recent Activity -->
+      <div class="col-md-8">
+        <div class="recent-activity p-4 mb-4">
+          <h4 class="mb-3">Recent Bookings</h4>
+          {% for booking in recent_bookings %}
+            <div class="activity-item">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="mb-1">{{ booking.name }} - {{ booking.number_of_guests }} guests</h6>
+                  <p class="text-muted mb-0">
+                    <i class="bi bi-grid me-1"></i>Table: {{ booking.table|default:"Not assigned" }}
+                    <span class="mx-2">|</span>
+                    <i class="bi bi-person me-1"></i>{{ booking.user.username|default:"Guest booking" }}
+                  </p>
+                </div>
+                <div class="text-end">
+                  <p class="mb-0">{{ booking.reservation_date|date:"M d, Y" }}</p>
+                  <small class="text-muted">{{ booking.reservation_date|time:"H:i" }}</small>
+                </div>
+              </div>
+            </div>
+          {% empty %}
+            <p class="text-muted">No recent bookings</p>
+          {% endfor %}
+        </div>
+
+        <!-- Recent Reviews -->
+        <div class="recent-activity p-4">
+          <h4 class="mb-3">Recent Reviews</h4>
+          {% for review in recent_reviews %}
+            <div class="review-item">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="mb-1">{{ review.title }}</h6>
+                  <p class="mb-1">{{ review.content|truncatewords:30 }}</p>
+                  <div class="rating-stars">
+                    {% for i in ""|ljust:review.rating %}⭐{% endfor %}
+                  </div>
+                  <small class="text-muted">By {{ review.user.username }} on {{ review.created_on|date:"M d, Y" }}</small>
+                </div>
+              </div>
+            </div>
+          {% empty %}
+            <p class="text-muted">No recent reviews</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Add any dashboard charts or interactive features here
+</script>
+{% endblock %} 
