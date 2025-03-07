@@ -17,7 +17,7 @@ from .views import (
 urlpatterns = [
     path("", home, name="home"),
     # Admin
-    path("admin/dashboard/", admin_dashboard, name="admin_dashboard"),
+    path("dashboard/", admin_dashboard, name="admin_dashboard"),
     # Menu
     path("menu/", MenuView.as_view(), name="menu"),
     # Bookings

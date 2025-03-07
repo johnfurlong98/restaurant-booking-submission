@@ -1,6 +1,6 @@
 # reservations/views.py
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import (
@@ -81,16 +81,19 @@ class BookingCreateView(CreateView):
     model = Booking
     form_class = BookingForm
     template_name = "reservations/booking_create.html"
-    success_url = reverse_lazy("home")
+    success_url = reverse_lazy("booking_list")
 
     def form_valid(self, form):
-        # If user is logged in, link the booking to them
         if self.request.user.is_authenticated:
             form.instance.user = self.request.user
-        messages.success(
-            self.request, "Your booking has been created successfully!"
-        )
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        messages.success(self.request, "Booking created successfully!")
+        return response
+
+    def get_success_url(self):
+        if self.request.user.is_authenticated:
+            return reverse_lazy("booking_list")
+        return reverse_lazy("home")
 
 
 class BookingUpdateView(LoginRequiredMixin, UpdateView):
@@ -169,8 +172,9 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        messages.success(self.request, "Thank you for your review!")
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        messages.success(self.request, "Review posted successfully!")
+        return response
 
 
 class ReviewDeleteView(LoginRequiredMixin, DeleteView):
