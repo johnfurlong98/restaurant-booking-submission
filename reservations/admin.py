@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import Booking, Review, RestaurantSettings, Table, MenuCategory, MenuItem
+from .models import (
+    RestaurantSettings,
+    Table,
+    Booking,
+    Review,
+)
 
 
 @admin.register(RestaurantSettings)
@@ -15,6 +20,7 @@ class RestaurantSettingsAdmin(admin.ModelAdmin):
 @admin.register(Table)
 class TableAdmin(admin.ModelAdmin):
     list_display = ("name", "capacity", "table_type")
+    list_filter = ("capacity", "table_type")
     search_fields = ("name", "table_type")
 
     def add_view(self, request, form_url="", extra_context=None):
@@ -33,44 +39,14 @@ class BookingAdmin(admin.ModelAdmin):
         "phone",
         "reservation_date",
         "number_of_guests",
-        "table",
-        "user",
     )
-    list_filter = ("reservation_date", "number_of_guests", "table")
+    list_filter = ("reservation_date", "number_of_guests")
     search_fields = ("name", "email", "phone")
+    date_hierarchy = "reservation_date"
 
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ("title", "user", "rating", "created_on")
-    list_filter = ("rating",)
+    list_filter = ("rating", "created_on")
     search_fields = ("title", "content", "user__username")
-
-
-@admin.register(MenuCategory)
-class MenuCategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "order")
-    search_fields = ("name",)
-    ordering = ["order", "name"]
-
-
-@admin.register(MenuItem)
-class MenuItemAdmin(admin.ModelAdmin):
-    list_display = (
-        "name",
-        "category",
-        "price",
-        "is_vegetarian",
-        "is_vegan",
-        "is_gluten_free",
-        "is_available",
-    )
-    list_filter = (
-        "category",
-        "is_vegetarian",
-        "is_vegan",
-        "is_gluten_free",
-        "is_available",
-    )
-    search_fields = ("name", "description")
-    ordering = ["category", "name"]

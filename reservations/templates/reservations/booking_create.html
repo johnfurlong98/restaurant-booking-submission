@@ -1,196 +1,240 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Create Booking</title>
-  <!-- Bootstrap 5 -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  >
-  <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">
-        Restaurant Booking
-      </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#mainNav"
-        aria-controls="mainNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
+{% extends 'reservations/base.html' %}
+{% block title %}Create Booking{% endblock %}
 
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/bookings/create/">
-              Make a Booking
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/reviews/">
-              Reviews
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/accounts/login/">
-              Login
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/accounts/register/">
-              Sign Up
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <h2 class="text-center mb-4">Create a Booking</h2>
 
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <h1 class="mb-4">Create a Booking</h1>
-        <hr>
+          <form method="post" novalidate class="booking-form" id="bookingForm">
+            {% csrf_token %}
 
-        <form method="post" novalidate>
-          {% csrf_token %}
-
-          <!-- Name -->
-          <div class="mb-3">
-            <label for="id_name" class="form-label">
-              Name *
-            </label>
-            <input
-              type="text"
-              name="name"
-              class="form-control"
-              maxlength="50"
-              required
-              id="id_name"
-            >
-          </div>
-
-          <!-- Email -->
-          <div class="mb-3">
-            <label for="id_email" class="form-label">
-              Email *
-            </label>
-            <input
-              type="email"
-              name="email"
-              class="form-control"
-              maxlength="254"
-              required
-              id="id_email"
-            >
-          </div>
-
-          <!-- Phone -->
-          <div class="mb-3">
-            <label for="id_phone" class="form-label">
-              Phone *
-            </label>
-            <input
-              type="text"
-              name="phone"
-              class="form-control"
-              maxlength="20"
-              required
-              id="id_phone"
-            >
-          </div>
-
-          <!-- Reservation Date -->
-          <div class="mb-3">
-            <label for="id_reservation_date" class="form-label">
-              Reservation date *
-            </label>
-            <input
-              type="datetime-local"
-              name="reservation_date"
-              class="form-control"
-              min="2024-12-30T10:50"
-              required
-              id="id_reservation_date"
-            >
-          </div>
-
-          <!-- Number of Guests -->
-          <div class="mb-3">
-            <label for="id_number_of_guests" class="form-label">
-              Number of guests *
-            </label>
-            <input
-              type="number"
-              name="number_of_guests"
-              class="form-control"
-              min="0"
-              required
-              id="id_number_of_guests"
-            >
-          </div>
-
-          <!-- Special Requests -->
-          <div class="mb-3">
-            <label for="id_special_requests" class="form-label">
-              Special requests
-            </label>
-            <textarea
-              name="special_requests"
-              cols="40"
-              rows="3"
-              class="form-control"
-              id="id_special_requests"
-            ></textarea>
-          </div>
-
-          <!-- Table with aria-describedby -->
-          <div class="mb-3">
-            <label for="id_table" class="form-label">
-              Table
-            </label>
-            <select
-              name="table"
-              aria-describedby="id_table_helptext"
-              id="id_table"
-              class="form-select"
-            >
-              <option value="" selected>---------</option>
-              <option value="1">1 (Capacity: 4, Type: Back Room)</option>
-              <option value="2">2 (Capacity: 4, Type: Back Room)</option>
-              <option value="3">3 (Capacity: 4, Type: N/A)</option>
-              <option value="4">4 (Capacity: 2, Type: Back Room)</option>
-              <option value="5">6 (Capacity: 4, Type: Main Area)</option>
-              <option value="6">5 (Capacity: 4, Type: Main Area)</option>
-              <option value="7">7 (Capacity: 4, Type: Main Area)</option>
-              <option value="8">8 (Capacity: 4, Type: N/A)</option>
-              <option value="9">9 (Capacity: 2, Type: Main Area)</option>
-            </select>
-            <!-- Add the ID for aria-describedby to point to -->
-            <div class="form-text" id="id_table_helptext">
-              Select a table (optional) if you want to specify a specific table.
+            <!-- Name -->
+            <div class="mb-3">
+              <label for="id_name" class="form-label">Name</label>
+              <input type="text" name="name" class="form-control" maxlength="50" required id="id_name">
+              {% if form.name.errors %}
+                <div class="alert alert-danger mt-2">{{ form.name.errors }}</div>
+              {% endif %}
             </div>
-          </div>
 
-          <button type="submit" class="btn btn-success">Book Now</button>
-          <a href="/" class="btn btn-secondary">Cancel</a>
-        </form>
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="id_email" class="form-label">Email</label>
+              <input type="email" name="email" class="form-control" maxlength="254" required id="id_email">
+              {% if form.email.errors %}
+                <div class="alert alert-danger mt-2">{{ form.email.errors }}</div>
+              {% endif %}
+            </div>
+
+            <!-- Phone -->
+            <div class="mb-3">
+              <label for="id_phone" class="form-label">Phone</label>
+              <input type="text" name="phone" class="form-control" maxlength="20" required id="id_phone">
+              {% if form.phone.errors %}
+                <div class="alert alert-danger mt-2">{{ form.phone.errors }}</div>
+              {% endif %}
+            </div>
+
+            <!-- Reservation Date -->
+            <div class="mb-3">
+              <label for="id_reservation_date" class="form-label">Reservation Date</label>
+              <input type="datetime-local" name="reservation_date" class="form-control" required id="id_reservation_date">
+              {% if form.reservation_date.errors %}
+                <div class="alert alert-danger mt-2">{{ form.reservation_date.errors }}</div>
+              {% endif %}
+              <div class="form-text" id="dateHelp">
+                Please select a future date and time for your reservation.
+              </div>
+            </div>
+
+            <!-- Number of Guests -->
+            <div class="mb-3">
+              <label for="id_number_of_guests" class="form-label">Number of Guests</label>
+              <input type="number" name="number_of_guests" class="form-control" min="1" required id="id_number_of_guests">
+              {% if form.number_of_guests.errors %}
+                <div class="alert alert-danger mt-2">{{ form.number_of_guests.errors }}</div>
+              {% endif %}
+            </div>
+
+            <!-- Special Requests -->
+            <div class="mb-3">
+              <label for="id_special_requests" class="form-label">Special Requests</label>
+              <textarea name="special_requests" class="form-control" rows="3" id="id_special_requests"></textarea>
+            </div>
+
+            <!-- Submit/Cancel Buttons -->
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary" id="submitBtn">
+                <i class="bi bi-calendar-check me-2"></i>Confirm Booking
+              </button>
+              <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-x-circle me-2"></i>Cancel
+              </a>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Bootstrap JS Bundle with Popper -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-  ></script>
-</body>
-</html>
+<!-- Existing Booking Modal -->
+{% if has_existing_booking %}
+<div class="modal fade" id="existingBookingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="existingBookingModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title" id="existingBookingModalLabel">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>Existing Booking Found
+        </h5>
+      </div>
+      <div class="modal-body">
+        <p>You already have an active booking:</p>
+        <div class="alert alert-info">
+          <strong>Date:</strong> {{ existing_booking.reservation_date|date:"F d, Y" }}<br>
+          <strong>Time:</strong> {{ existing_booking.reservation_date|time:"g:i A" }}<br>
+          <strong>Guests:</strong> {{ existing_booking.number_of_guests }}
+        </div>
+        <p>Would you like to proceed with creating a new booking?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancelBtn">
+          <i class="bi bi-x-circle me-2"></i>Cancel
+        </button>
+        <button type="button" class="btn btn-primary" id="continueBtn">
+          <i class="bi bi-check-circle me-2"></i>Continue
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<style>
+  .booking-form .form-control,
+  .booking-form .form-select {
+    border-radius: 8px;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    width: 100%;
+    height: 45px;
+  }
+  
+  .booking-form textarea.form-control {
+    height: auto;
+  }
+  
+  .booking-form .form-control:focus,
+  .booking-form .form-select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  
+  .booking-form .form-label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn-primary {
+    padding: 0.75rem;
+    font-weight: 500;
+    background: linear-gradient(to right, #007bff, #0056b3);
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    background: linear-gradient(to right, #0056b3, #004085);
+    transform: translateY(-1px);
+  }
+  
+  .btn-outline-secondary {
+    padding: 0.75rem;
+    font-weight: 500;
+  }
+  
+  .alert {
+    border-radius: 8px;
+  }
+
+  .modal-content {
+    border-radius: 15px;
+    border: none;
+  }
+
+  .modal-header {
+    border-radius: 15px 15px 0 0;
+  }
+
+  .modal-footer {
+    border-radius: 0 0 15px 15px;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get the date input element
+    const dateInput = document.getElementById('id_reservation_date');
+    
+    // Set min date to current date and time
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    
+    const minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    dateInput.min = minDateTime;
+    
+    // Add event listener for date validation
+    dateInput.addEventListener('change', function() {
+      const selectedDate = new Date(this.value);
+      const currentDate = new Date();
+      
+      if (selectedDate < currentDate) {
+        alert('Please select a future date and time for your reservation.');
+        this.value = '';
+      }
+    });
+
+    // Handle existing booking modal
+    const existingBookingModal = document.getElementById('existingBookingModal');
+    if (existingBookingModal) {
+      const modal = new bootstrap.Modal(existingBookingModal);
+      const form = document.getElementById('bookingForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const continueBtn = document.getElementById('continueBtn');
+      const cancelBtn = document.getElementById('cancelBtn');
+
+      // Show modal when form is submitted
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        modal.show();
+      });
+
+      // Handle continue button
+      continueBtn.addEventListener('click', function() {
+        modal.hide();
+        form.submit();
+      });
+
+      // Handle cancel button
+      cancelBtn.addEventListener('click', function() {
+        modal.hide();
+        window.location.href = "{% url 'home' %}";
+      });
+    }
+  });
+</script>
+{% endblock %}

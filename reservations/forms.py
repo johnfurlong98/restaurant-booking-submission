@@ -23,15 +23,11 @@ class BookingForm(forms.ModelForm):
             "reservation_date",
             "number_of_guests",
             "special_requests",
-            "table",
         ]
         widgets = {
             "reservation_date": forms.DateTimeInput(
-                attrs={
-                    "type": "datetime-local",
-                    "class": "form-control",
-                    "min": timezone.now().strftime("%Y-%m-%dT%H:%M"),
-                }
+                attrs={"type": "datetime-local"},
+                format="%Y-%m-%dT%H:%M",
             ),
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "email": forms.EmailInput(attrs={"class": "form-control"}),
@@ -45,30 +41,12 @@ class BookingForm(forms.ModelForm):
         }
 
     def clean_reservation_date(self):
+        """
+        Check that the reservation date is in the future.
+        """
         reservation_date = self.cleaned_data["reservation_date"]
         if reservation_date < timezone.now():
-            raise ValidationError(
-                "Reservation date and time must be in the future."
-            )
-
-        # Check restaurant working hours if RestaurantSettings exist
-        settings = RestaurantSettings.objects.first()
-        if settings:
-            # Compare times only if date is the same day or you allow multi-day
-            open_dt = reservation_date.replace(
-                hour=settings.open_time.hour,
-                minute=settings.open_time.minute,
-                second=0,
-            )
-            close_dt = reservation_date.replace(
-                hour=settings.close_time.hour,
-                minute=settings.close_time.minute,
-                second=0,
-            )
-            if not (open_dt <= reservation_date < close_dt):
-                raise ValidationError(
-                    f"Bookings can only be made between {settings.open_time} and {settings.close_time}."
-                )
+            raise forms.ValidationError("Please select a future date and time.")
         return reservation_date
 
     def clean_number_of_guests(self):

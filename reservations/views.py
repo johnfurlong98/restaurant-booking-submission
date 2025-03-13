@@ -13,7 +13,7 @@ from django.views.generic import (
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login
-from .models import Booking, Review, MenuCategory, MenuItem, Table
+from .models import Booking, Review, Table
 from .forms import BookingForm, ReviewForm, CustomUserCreationForm
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
@@ -83,12 +83,47 @@ class BookingCreateView(CreateView):
     template_name = "reservations/booking_create.html"
     success_url = reverse_lazy("booking_list")
 
-    def form_valid(self, form):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            form.instance.user = self.request.user
-        response = super().form_valid(form)
-        messages.success(self.request, "Booking created successfully!")
-        return response
+            # Check for existing non-expired bookings
+            existing_booking = Booking.objects.filter(
+                user=self.request.user,
+                reservation_date__gte=timezone.now()
+            ).order_by('reservation_date').first()
+            
+            if existing_booking:
+                context['existing_booking'] = existing_booking
+                context['has_existing_booking'] = True
+            else:
+                context['has_existing_booking'] = False
+        return context
+
+    def form_valid(self, form):
+        try:
+            if self.request.user.is_authenticated:
+                form.instance.user = self.request.user
+            response = super().form_valid(form)
+            messages.success(
+                self.request,
+                f"Booking created successfully for {form.instance.reservation_date.strftime('%B %d, %Y at %I:%M %p')}!"
+            )
+            return response
+        except Exception as e:
+            messages.error(
+                self.request,
+                f"Error creating booking: {str(e)}"
+            )
+            return self.form_invalid(form)
+
+    def form_invalid(self, form):
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(
+                    self.request,
+                    f"Error in {field}: {error}"
+                )
+        return super().form_invalid(form)
 
     def get_success_url(self):
         if self.request.user.is_authenticated:
@@ -112,10 +147,28 @@ class BookingUpdateView(LoginRequiredMixin, UpdateView):
         return Booking.objects.filter(user=self.request.user)
 
     def form_valid(self, form):
-        messages.success(
-            self.request, "Your booking has been updated successfully!"
-        )
-        return super().form_valid(form)
+        try:
+            response = super().form_valid(form)
+            messages.success(
+                self.request,
+                f"Booking updated successfully for {form.instance.reservation_date.strftime('%B %d, %Y at %I:%M %p')}!"
+            )
+            return response
+        except Exception as e:
+            messages.error(
+                self.request,
+                f"Error updating booking: {str(e)}"
+            )
+            return self.form_invalid(form)
+
+    def form_invalid(self, form):
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(
+                    self.request,
+                    f"Error in {field}: {error}"
+                )
+        return super().form_invalid(form)
 
 
 class BookingDeleteView(LoginRequiredMixin, DeleteView):
@@ -133,10 +186,26 @@ class BookingDeleteView(LoginRequiredMixin, DeleteView):
         return Booking.objects.filter(user=self.request.user)
 
     def delete(self, request, *args, **kwargs):
-        messages.success(
-            self.request, "Your booking has been deleted successfully!"
-        )
-        return super().delete(request, *args, **kwargs)
+        try:
+            booking = self.get_object()
+            booking_date = booking.reservation_date.strftime('%B %d, %Y at %I:%M %p')
+            response = super().delete(request, *args, **kwargs)
+            messages.success(
+                self.request,
+                f"Booking for {booking_date} has been deleted successfully!"
+            )
+            return response
+        except Exception as e:
+            messages.error(
+                self.request,
+                f"Error deleting booking: {str(e)}"
+            )
+            return redirect('booking_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['booking_date'] = self.object.reservation_date.strftime('%B %d, %Y at %I:%M %p')
+        return context
 
 
 # ==============
@@ -226,18 +295,6 @@ def register_user(request):
     else:
         form = CustomUserCreationForm()
     return render(request, "reservations/register.html", {"form": form})
-
-
-class MenuView(TemplateView):
-    """
-    Display the restaurant menu organized by categories
-    """
-    template_name = "reservations/menu.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['categories'] = MenuCategory.objects.prefetch_related('items').all()
-        return context
 
 
 @staff_member_required

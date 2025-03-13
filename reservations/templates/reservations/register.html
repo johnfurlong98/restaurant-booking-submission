@@ -2,73 +2,148 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-md-6">
-    <h1 class="mb-4">Sign Up</h1>
-    <hr>
-    <form method="POST" novalidate>
-      {% csrf_token %}
-      
-      <!-- Username -->
-      <div class="mb-3">
-        <label for="id_username" class="form-label">Username *</label>
-        {{ form.username }}
-        {% if form.username.errors %}
-          <div class="alert alert-danger">
-            {{ form.username.errors }}
-          </div>
-        {% endif %}
-        <div class="form-text" id="id_username_helptext">
-          Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <h2 class="text-center mb-4">Create Account</h2>
+          
+          <form method="POST" novalidate class="registration-form">
+            {% csrf_token %}
+            
+            <!-- Username -->
+            <div class="mb-3">
+              <label for="id_username" class="form-label">Username</label>
+              {{ form.username }}
+              {% if form.username.errors %}
+                <div class="alert alert-danger mt-2">
+                  {{ form.username.errors }}
+                </div>
+              {% endif %}
+              <div class="form-text">
+                Letters, digits and @/./+/-/_ only.
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="id_email" class="form-label">Email</label>
+              {{ form.email }}
+              {% if form.email.errors %}
+                <div class="alert alert-danger mt-2">
+                  {{ form.email.errors }}
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+              <label for="id_password1" class="form-label">Password</label>
+              {{ form.password1 }}
+              {% if form.password1.errors %}
+                <div class="alert alert-danger mt-2">
+                  {{ form.password1.errors }}
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- Password Confirmation -->
+            <div class="mb-3">
+              <label for="id_password2" class="form-label">Confirm Password</label>
+              {{ form.password2 }}
+              {% if form.password2.errors %}
+                <div class="alert alert-danger mt-2">
+                  {{ form.password2.errors }}
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- Password Requirements -->
+            <div class="mb-4">
+              <div class="form-text">
+                <small>
+                  <ul class="mb-0 ps-3">
+                    <li>Password must be at least 8 characters long</li>
+                    <li>Cannot be too similar to your personal information</li>
+                    <li>Cannot be a commonly used password</li>
+                    <li>Cannot be entirely numeric</li>
+                  </ul>
+                </small>
+              </div>
+            </div>
+
+            <!-- Submit/Cancel Buttons -->
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">Create Account</button>
+              <a href="{% url 'home' %}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+          </form>
         </div>
       </div>
-
-      <!-- Email -->
-      <div class="mb-3">
-        <label for="id_email" class="form-label">Email *</label>
-        {{ form.email }}
-        {% if form.email.errors %}
-          <div class="alert alert-danger">
-            {{ form.email.errors }}
-          </div>
-        {% endif %}
-      </div>
-
-      <!-- Password -->
-      <div class="mb-3">
-        <label for="id_password1" class="form-label">Password</label>
-        {{ form.password1 }}
-        {% if form.password1.errors %}
-          <div class="alert alert-danger">
-            {{ form.password1.errors }}
-          </div>
-        {% endif %}
-        <div class="form-text" id="id_password1_helptext">
-          <ul>
-            <li>Your password can't be too similar to your other personal information.</li>
-            <li>Your password must contain at least 8 characters.</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Password Confirmation -->
-      <div class="mb-3">
-        <label for="id_password2" class="form-label">Password confirmation</label>
-        {{ form.password2 }}
-        {% if form.password2.errors %}
-          <div class="alert alert-danger">
-            {{ form.password2.errors }}
-          </div>
-        {% endif %}
-        <div class="form-text" id="id_password2_helptext">
-          Enter the same password as before, for verification.
-        </div>
-      </div>
-
-      <!-- Submit/Cancel -->
-      <button type="submit" class="btn btn-primary">Register</button>
-      <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
-    </form>
+    </div>
   </div>
 </div>
+
+<style>
+  .registration-form .form-control {
+    border-radius: 8px;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    width: 100%;
+    height: 45px;
+  }
+  
+  .registration-form .form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  
+  .registration-form .form-label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn-primary {
+    padding: 0.75rem;
+    font-weight: 500;
+    background: linear-gradient(to right, #007bff, #0056b3);
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    background: linear-gradient(to right, #0056b3, #004085);
+    transform: translateY(-1px);
+  }
+  
+  .btn-outline-secondary {
+    padding: 0.75rem;
+    font-weight: 500;
+  }
+  
+  .form-text {
+    color: #6c757d;
+    font-size: 0.875rem;
+  }
+  
+  .form-text ul {
+    margin-bottom: 0;
+  }
+
+  /* Fix for password fields alignment */
+  #id_password1, #id_password2 {
+    width: 100%;
+    height: 45px;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+  }
+</style>
 {% endblock %}
