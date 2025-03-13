@@ -1,5 +1,17 @@
 {% extends 'reservations/base.html' %}
+
+{% block background_style %}
+body {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+              url('https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=2000&q=80');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+{% endblock %}
+
 {% block title %}My Bookings{% endblock %}
+
 {% block content %}
 <h1>My Bookings</h1>
 <p>This page shows your bookings (or all if you're staff).</p>

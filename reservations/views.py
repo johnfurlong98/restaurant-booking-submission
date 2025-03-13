@@ -11,10 +11,11 @@ from django.views.generic import (
     DeleteView,
     TemplateView,
 )
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login
-from .models import Booking, Review, Table
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Booking, Review
 from .forms import BookingForm, ReviewForm, CustomUserCreationForm
+from .mixins import StaffOrOwnerMixin, SuccessMessageMixin, ErrorMessageMixin
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -36,40 +37,25 @@ def home(request):
 # ==============
 #   BOOKING
 # ==============
-class BookingListView(LoginRequiredMixin, ListView):
+class BookingListView(StaffOrOwnerMixin, ListView):
     """
     For staff or logged-in users to see all (or filtered) bookings.
     Staff can see all bookings; regular users see only their own.
     """
-
     model = Booking
     template_name = "reservations/booking_list.html"
     context_object_name = "bookings"
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            return Booking.objects.all().order_by("reservation_date")
-        else:
-            return Booking.objects.filter(user=self.request.user).order_by(
-                "reservation_date"
-            )
+    ordering = ["reservation_date"]
 
 
-class BookingDetailView(LoginRequiredMixin, DetailView):
+class BookingDetailView(StaffOrOwnerMixin, DetailView):
     """
     Detailed view of one booking.
     Staff can view all; regular users can view only their own.
     """
-
     model = Booking
     template_name = "reservations/booking_detail.html"
     context_object_name = "booking"
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            return Booking.objects.all()
-        else:
-            return Booking.objects.filter(user=self.request.user)
 
 
 class BookingCreateView(CreateView):
@@ -77,7 +63,6 @@ class BookingCreateView(CreateView):
     Anyone can create a booking (no login required).
     If user is logged in, attach user to the booking automatically.
     """
-
     model = Booking
     form_class = BookingForm
     template_name = "reservations/booking_create.html"
@@ -86,7 +71,6 @@ class BookingCreateView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            # Check for existing non-expired bookings
             existing_booking = Booking.objects.filter(
                 user=self.request.user,
                 reservation_date__gte=timezone.now()
@@ -116,91 +100,26 @@ class BookingCreateView(CreateView):
             )
             return self.form_invalid(form)
 
-    def form_invalid(self, form):
-        for field, errors in form.errors.items():
-            for error in errors:
-                messages.error(
-                    self.request,
-                    f"Error in {field}: {error}"
-                )
-        return super().form_invalid(form)
 
-    def get_success_url(self):
-        if self.request.user.is_authenticated:
-            return reverse_lazy("booking_list")
-        return reverse_lazy("home")
-
-
-class BookingUpdateView(LoginRequiredMixin, UpdateView):
+class BookingUpdateView(StaffOrOwnerMixin, SuccessMessageMixin, ErrorMessageMixin, UpdateView):
     """
     Only staff or the booking's user can edit.
     """
-
     model = Booking
     form_class = BookingForm
     template_name = "reservations/booking_update.html"
     success_url = reverse_lazy("booking_list")
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            return Booking.objects.all()
-        return Booking.objects.filter(user=self.request.user)
-
-    def form_valid(self, form):
-        try:
-            response = super().form_valid(form)
-            messages.success(
-                self.request,
-                f"Booking updated successfully for {form.instance.reservation_date.strftime('%B %d, %Y at %I:%M %p')}!"
-            )
-            return response
-        except Exception as e:
-            messages.error(
-                self.request,
-                f"Error updating booking: {str(e)}"
-            )
-            return self.form_invalid(form)
-
-    def form_invalid(self, form):
-        for field, errors in form.errors.items():
-            for error in errors:
-                messages.error(
-                    self.request,
-                    f"Error in {field}: {error}"
-                )
-        return super().form_invalid(form)
+    success_message = "Booking updated successfully!"
 
 
-class BookingDeleteView(LoginRequiredMixin, DeleteView):
+class BookingDeleteView(StaffOrOwnerMixin, SuccessMessageMixin, DeleteView):
     """
     Only staff or the booking's user can delete.
     """
-
     model = Booking
     template_name = "reservations/booking_delete.html"
     success_url = reverse_lazy("booking_list")
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            return Booking.objects.all()
-        return Booking.objects.filter(user=self.request.user)
-
-    def delete(self, request, *args, **kwargs):
-        try:
-            booking = self.get_object()
-            booking_date = booking.reservation_date.strftime('%B %d, %Y at %I:%M %p')
-            response = super().delete(request, *args, **kwargs)
-            messages.success(
-                self.request,
-                f"Booking for {booking_date} has been deleted successfully!"
-            )
-            return response
-        except Exception as e:
-            messages.error(
-                self.request,
-                f"Error deleting booking: {str(e)}"
-            )
-            return redirect('booking_list')
+    success_message = "Booking deleted successfully!"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -211,60 +130,39 @@ class BookingDeleteView(LoginRequiredMixin, DeleteView):
 # ==============
 #   REVIEWS
 # ==============
-class ReviewListView(LoginRequiredMixin, ListView):
+class ReviewListView(StaffOrOwnerMixin, ListView):
     """
     List all reviews. Staff can see all; regular users see their own.
     """
-
     model = Review
     template_name = "reservations/review_list.html"
     context_object_name = "reviews"
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            return Review.objects.all().order_by("-created_on")
-        else:
-            return Review.objects.filter(user=self.request.user).order_by(
-                "-created_on"
-            )
+    ordering = ["-created_on"]
 
 
-class ReviewCreateView(LoginRequiredMixin, CreateView):
+class ReviewCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     """
     Only logged-in users can create a review.
     """
-
     model = Review
     form_class = ReviewForm
     template_name = "reservations/review_create.html"
     success_url = reverse_lazy("review_list")
+    success_message = "Review posted successfully!"
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        response = super().form_valid(form)
-        messages.success(self.request, "Review posted successfully!")
-        return response
+        return super().form_valid(form)
 
 
-class ReviewDeleteView(LoginRequiredMixin, DeleteView):
+class ReviewDeleteView(StaffOrOwnerMixin, SuccessMessageMixin, DeleteView):
     """
     Only staff or the review's owner can delete a review.
     """
-
     model = Review
     template_name = "reservations/review_delete.html"
     success_url = reverse_lazy("review_list")
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            return Review.objects.all()
-        return Review.objects.filter(user=self.request.user)
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(
-            self.request, "Your review has been deleted successfully!"
-        )
-        return super().delete(request, *args, **kwargs)
+    success_message = "Review deleted successfully!"
 
 
 # ==============
@@ -279,9 +177,7 @@ def register_user(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(
-                request, user
-            )  # Automatically log in the user after registration
+            login(request, user)
             messages.success(
                 request,
                 "Your account has been created and you're now logged in.",
@@ -316,13 +212,8 @@ def admin_dashboard(request):
         reservation_date__range=(timezone.now(), next_week)
     ).count()
 
-    # Get table utilization
-    table_stats = Table.objects.annotate(
-        booking_count=Count('bookings')
-    ).order_by('-booking_count')[:5]
-
-    # Get recent bookings with more details
-    recent_bookings = Booking.objects.select_related('table', 'user').order_by(
+    # Get recent bookings
+    recent_bookings = Booking.objects.select_related('user').order_by(
         '-created_on'
     )[:10]
 
@@ -337,7 +228,6 @@ def admin_dashboard(request):
         'total_users': total_users,
         'avg_rating': avg_rating,
         'upcoming_bookings': upcoming_bookings,
-        'table_stats': table_stats,
         'recent_bookings': recent_bookings,
         'recent_reviews': recent_reviews,
     }

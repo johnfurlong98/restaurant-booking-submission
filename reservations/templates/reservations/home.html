@@ -1,14 +1,372 @@
 {% extends 'reservations/base.html' %}
+
+{% block background_style %}
+body {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+              url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=2000&q=80');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+{% endblock %}
+
 {% block title %}Home | Restaurant Booking{% endblock %}
+
 {% block content %}
-  <h1 class="mb-3">Welcome to Our Restaurant Booking System</h1>
-  <p>
-    You can create a booking with just your phone and email — 
-    no account required. If you want advanced features (like 
-    seeing your personal booking list, or leaving reviews), please 
-    <a href="{% url 'register_user' %}">sign up</a> or 
-    <a href="{% url 'login' %}">log in</a>.
-  </p>
-  <hr>
-  <a href="{% url 'booking_create' %}" class="btn btn-success">Create a Booking Now</a>
+<div class="hero-section text-center mb-5">
+  <h1 class="display-4 mb-4">Welcome to Our Restaurant</h1>
+  <p class="lead mb-4">Experience fine dining at its best with our exquisite menu and ambiance</p>
+  <a href="{% url 'booking_create' %}" class="btn btn-lg btn-success mb-5">
+    <i class="bi bi-calendar-plus me-2"></i>Book a Table
+  </a>
+</div>
+
+<!-- Image Carousel -->
+<div id="restaurantCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#restaurantCarousel" data-bs-slide-to="0" class="active"></button>
+    <button type="button" data-bs-target="#restaurantCarousel" data-bs-slide-to="1"></button>
+    <button type="button" data-bs-target="#restaurantCarousel" data-bs-slide-to="2"></button>
+    <button type="button" data-bs-target="#restaurantCarousel" data-bs-slide-to="3"></button>
+  </div>
+  
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=2000&q=80" class="d-block w-100" alt="Restaurant Interior">
+      <div class="carousel-caption">
+        <h3>Elegant Dining Room</h3>
+        <p>Experience the perfect ambiance for your special occasions</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=2000&q=80" class="d-block w-100" alt="Fine Dining">
+      <div class="carousel-caption">
+        <h3>Exquisite Cuisine</h3>
+        <p>Savor our chef's specially crafted dishes</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=2000&q=80" class="d-block w-100" alt="Wine Selection">
+      <div class="carousel-caption">
+        <h3>Premium Wine Selection</h3>
+        <p>Choose from our curated collection of fine wines</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?auto=format&fit=crop&w=2000&q=80" class="d-block w-100" alt="Outdoor Seating">
+      <div class="carousel-caption">
+        <h3>Outdoor Dining</h3>
+        <p>Enjoy your meal in our beautiful garden setting</p>
+      </div>
+    </div>
+  </div>
+  
+  <button class="carousel-control-prev" type="button" data-bs-target="#restaurantCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#restaurantCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<!-- Features Section -->
+<div class="row g-4 mb-5">
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body text-center">
+        <i class="bi bi-clock display-4 mb-3 text-primary"></i>
+        <h3 class="card-title">Quick Booking</h3>
+        <p class="card-text">Reserve your table in minutes with our easy-to-use booking system</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body text-center">
+        <i class="bi bi-star display-4 mb-3 text-warning"></i>
+        <h3 class="card-title">Fine Dining</h3>
+        <p class="card-text">Experience exceptional cuisine prepared by our expert chefs</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body text-center">
+        <i class="bi bi-people display-4 mb-3 text-success"></i>
+        <h3 class="card-title">Perfect for Events</h3>
+        <p class="card-text">Ideal venue for special occasions and group celebrations</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Reviews Section -->
+<div class="reviews-section mb-5">
+  <h2 class="text-center mb-4">What Our Guests Say</h2>
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card review-card h-100">
+        <div class="card-body">
+          <div class="stars mb-3">
+            <i class="bi bi-star-fill text-warning"></i>
+            <i class="bi bi-star-fill text-warning"></i>
+            <i class="bi bi-star-fill text-warning"></i>
+            <i class="bi bi-star-fill text-warning"></i>
+            <i class="bi bi-star text-warning"></i>
+          </div>
+          <p class="review-text">"Amazing dining experience! The food was exceptional and the service was impeccable. Will definitely be coming back!"</p>
+          <div class="reviewer">
+            <i class="bi bi-person-circle me-2"></i>
+            <span>Sarah Johnson</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card review-card h-100">
+        <div class="card-body">
+          <div class="stars mb-3">
+            <i class="bi bi-star-fill text-warning"></i>
+            <i class="bi bi-star-fill text-warning"></i>
+            <i class="bi bi-star-fill text-warning"></i>
+            <i class="bi bi-star-fill text-warning"></i>
+            <i class="bi bi-star-fill text-warning"></i>
+            <i class="bi bi-star-fill text-warning"></i>
+          </div>
+          <p class="review-text">"The best fine dining experience in the city! The wine selection is outstanding and the atmosphere is perfect for special occasions."</p>
+          <div class="reviewer">
+            <i class="bi bi-person-circle me-2"></i>
+            <span>Michael Chen</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card review-card h-100">
+        <div class="card-body">
+          <div class="stars mb-3">
+            <i class="bi bi-star-fill text-warning"></i>
+            <i class="bi bi-star-fill text-warning"></i>
+            <i class="bi bi-star-fill text-warning"></i>
+            <i class="bi bi-star-fill text-warning"></i>
+            <i class="bi bi-star text-warning"></i>
+          </div>
+          <p class="review-text">"Great ambiance and delicious food. The outdoor seating area is beautiful and the service is top-notch!"</p>
+          <div class="reviewer">
+            <i class="bi bi-person-circle me-2"></i>
+            <span>Emma Thompson</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="faq-section mb-5">
+  <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+  <div class="accordion" id="faqAccordion">
+    <div class="accordion-item">
+      <h3 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+          How do I make a reservation?
+        </button>
+      </h3>
+      <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+        <div class="accordion-body">
+          You can easily make a reservation through our online booking system. Simply click the "Book a Table" button, fill in your details, and select your preferred date and time.
+        </div>
+      </div>
+    </div>
+    
+    <div class="accordion-item">
+      <h3 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+          What's your cancellation policy?
+        </button>
+      </h3>
+      <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+        <div class="accordion-body">
+          We understand plans can change. You can cancel or modify your reservation up to 24 hours before your booking time without any charge.
+        </div>
+      </div>
+    </div>
+    
+    <div class="accordion-item">
+      <h3 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+          Do you accommodate dietary restrictions?
+        </button>
+      </h3>
+      <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+        <div class="accordion-body">
+          Yes, we cater to various dietary requirements including vegetarian, vegan, and gluten-free options. Please mention any specific dietary needs in the special requests section when booking.
+        </div>
+      </div>
+    </div>
+    
+    <div class="accordion-item">
+      <h3 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+          Is there a dress code?
+        </button>
+      </h3>
+      <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+        <div class="accordion-body">
+          We maintain a smart casual dress code. While formal attire is not required, we ask that guests avoid wearing beachwear, sports attire, or flip-flops.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .hero-section {
+    padding: 4rem 0;
+  }
+  
+  .carousel {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .carousel-item {
+    height: 500px;
+  }
+  
+  .carousel-item img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .carousel-caption {
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  
+  .carousel-caption h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .carousel-indicators {
+    margin-bottom: 2rem;
+  }
+  
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 5%;
+  }
+  
+  .card {
+    transition: transform 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-10px);
+  }
+  
+  .display-4 {
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .btn-success {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: linear-gradient(to right, #28a745, #20c997);
+    border: none;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+    background: linear-gradient(to right, #20c997, #28a745);
+  }
+
+  /* Reviews Section Styles */
+  .reviews-section {
+    padding: 2rem 0;
+  }
+
+  .review-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .review-card .stars {
+    font-size: 1.2rem;
+  }
+
+  .review-text {
+    font-style: italic;
+    margin-bottom: 1rem;
+    color: #555;
+  }
+
+  .reviewer {
+    color: #666;
+    font-weight: 500;
+  }
+
+  /* FAQ Section Styles */
+  .faq-section {
+    padding: 2rem 0;
+  }
+
+  .accordion-item {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    margin-bottom: 1rem;
+    border-radius: 10px !important;
+    overflow: hidden;
+  }
+
+  .accordion-button {
+    background: rgba(255, 255, 255, 0.95);
+    font-weight: 500;
+    padding: 1.25rem;
+    color: #333;
+  }
+
+  .accordion-button:not(.collapsed) {
+    background: linear-gradient(to right, #007bff, #0056b3);
+    color: white;
+  }
+
+  .accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(0, 123, 255, 0.25);
+  }
+
+  .accordion-body {
+    padding: 1.25rem;
+    color: #555;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize the carousel with a 5-second interval
+    new bootstrap.Carousel(document.getElementById('restaurantCarousel'), {
+      interval: 5000
+    });
+  });
+</script>
 {% endblock %}

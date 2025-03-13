@@ -3,15 +3,29 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Booking, Review, Table, RestaurantSettings
+from .models import Booking, Review, RestaurantSettings
 import re
 
 
-class BookingForm(forms.ModelForm):
+class BaseForm(forms.ModelForm):
+    """
+    Base form class with common validation methods
+    """
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone', '')
+        if phone:
+            pattern = r"^\+?\d{7,15}$"
+            if not re.match(pattern, phone):
+                raise ValidationError(
+                    "Invalid phone number. Must contain 7-15 digits and may start with '+'."
+                )
+        return phone
+
+
+class BookingForm(BaseForm):
     """
     Enhanced booking form:
     - References RestaurantSettings to block out-of-hours reservations
-    - Ensures table capacity isn't exceeded if a table is chosen
     """
 
     class Meta:
@@ -55,42 +69,8 @@ class BookingForm(forms.ModelForm):
             raise ValidationError("Number of guests must be at least 1.")
         return number_of_guests
 
-    def clean_phone(self):
-        phone = self.cleaned_data["phone"]
-        # Basic pattern: optional +, followed by 7-15 digits
-        pattern = r"^\+?\d{7,15}$"
-        if not re.match(pattern, phone):
-            raise ValidationError(
-                "Invalid phone number. Must contain 7-15 digits and may start with '+'."
-            )
-        return phone
 
-    def clean(self):
-        """
-        Check table capacity vs. number_of_guests and table availability
-        """
-        cleaned_data = super().clean()
-        table = cleaned_data.get("table")
-        guests = cleaned_data.get("number_of_guests")
-        reservation_date = cleaned_data.get("reservation_date")
-
-        if all([table, guests, reservation_date]):
-            # Check table capacity
-            if guests > table.capacity:
-                raise ValidationError(
-                    f"This table (capacity: {table.capacity}) can't accommodate {guests} guests."
-                )
-            
-            # Check table availability
-            if not table.is_available(reservation_date):
-                raise ValidationError(
-                    f"Sorry, this table is not available at the requested time. Please choose another table or time."
-                )
-
-        return cleaned_data
-
-
-class ReviewForm(forms.ModelForm):
+class ReviewForm(BaseForm):
     """
     For user reviews
     """

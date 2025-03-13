@@ -17,22 +17,36 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      color: #fff;
     }
+    
+    {% block background_style %}{% endblock %}
     
     .main-content {
       flex: 1;
-      background-color: #f8f9fa;
       padding: 2rem 0;
+      position: relative;
+    }
+    
+    .container {
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 15px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      margin-top: 1rem;
+      margin-bottom: 1rem;
     }
     
     .navbar {
       padding: 1rem 0;
-      background: linear-gradient(to right, #1a1a1a, #333) !important;
+      background: rgba(0, 0, 0, 0.8) !important;
+      backdrop-filter: blur(10px);
     }
     
     .navbar-brand {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       font-weight: bold;
+      font-family: 'Playfair Display', serif;
     }
     
     .nav-link {
@@ -40,36 +54,65 @@
       padding: 0.5rem 1rem !important;
       border-radius: 5px;
       transition: all 0.3s ease;
+      color: #fff !important;
     }
     
     .nav-link:hover {
-      background-color: rgba(255,255,255,0.1);
+      background-color: rgba(255,255,255,0.2);
+      transform: translateY(-2px);
     }
     
     .footer {
-      background-color: #1a1a1a;
+      background-color: rgba(0, 0, 0, 0.9);
       color: white;
       padding: 2rem 0;
       margin-top: auto;
+      backdrop-filter: blur(10px);
     }
     
     .btn {
       border-radius: 5px;
       padding: 0.5rem 1.5rem;
       font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
     
     .card {
       border: none;
       border-radius: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: #333;
     }
     
     .card:hover {
       transform: translateY(-5px);
     }
+
+    .alert {
+      background-color: rgba(255, 255, 255, 0.9);
+      border: none;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Add some elegant typography */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Add a subtle text shadow to improve readability */
+    .text-shadow {
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
   </style>
+  <!-- Add Playfair Display font for elegant typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- Navigation -->

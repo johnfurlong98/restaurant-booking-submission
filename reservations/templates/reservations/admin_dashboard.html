@@ -1,5 +1,15 @@
 {% extends "reservations/base.html" %}
 
+{% block background_style %}
+body {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+              url('https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=2000&q=80');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+{% endblock %}
+
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block content %}
@@ -49,17 +59,12 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <a href="{% url 'admin:reservations_booking_add' %}" class="btn btn-primary w-100 mb-3">
                         <i class="bi bi-plus-circle me-2"></i>Add New Booking
                     </a>
                 </div>
-                <div class="col-md-4">
-                    <a href="{% url 'admin:reservations_table_changelist' %}" class="btn btn-info w-100 mb-3">
-                        <i class="bi bi-table me-2"></i>Manage Tables
-                    </a>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <a href="{% url 'admin:reservations_restaurantsettings_changelist' %}" class="btn btn-success w-100 mb-3">
                         <i class="bi bi-gear me-2"></i>Restaurant Settings
                     </a>
@@ -84,7 +89,6 @@
                                     <th>Date</th>
                                     <th>Name</th>
                                     <th>Guests</th>
-                                    <th>Table</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -93,11 +97,10 @@
                                     <td>{{ booking.reservation_date|date:"M d, Y" }}</td>
                                     <td>{{ booking.name }}</td>
                                     <td>{{ booking.number_of_guests }}</td>
-                                    <td>{{ booking.table.name }}</td>
                                 </tr>
                                 {% empty %}
                                 <tr>
-                                    <td colspan="4" class="text-center">No recent bookings</td>
+                                    <td colspan="3" class="text-center">No recent bookings</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

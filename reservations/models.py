@@ -23,45 +23,6 @@ class RestaurantSettings(models.Model):
         return f"Restaurant Settings (Open: {self.open_time}, Close: {self.close_time})"
 
 
-class Table(models.Model):
-    """
-    A model representing a physical table in the restaurant.
-
-    name: e.g., "Table #1"
-    capacity: how many guests it can seat
-    table_type: optional descriptor, e.g., "window seat," "booth," etc.
-    """
-
-    name = models.CharField(max_length=50)
-    capacity = models.PositiveIntegerField()
-    table_type = models.CharField(max_length=50, blank=True, null=True)
-
-    def is_available(self, check_date, duration_minutes=120):
-        """
-        Check if the table is available at the given date/time.
-        By default, checks for 2-hour window around the requested time.
-        """
-        # Convert check_date to UTC if it's not already
-        if timezone.is_naive(check_date):
-            check_date = timezone.make_aware(check_date)
-        
-        # Define the time window
-        start_time = check_date - timedelta(minutes=duration_minutes/2)
-        end_time = check_date + timedelta(minutes=duration_minutes/2)
-        
-        # Check for overlapping bookings
-        overlapping_bookings = self.bookings.filter(
-            reservation_date__gt=start_time,
-            reservation_date__lt=end_time
-        ).exists()
-        
-        return not overlapping_bookings
-
-    def __str__(self):
-        type_str = self.table_type or "N/A"
-        return f"{self.name} (Capacity: {self.capacity}, Type: {type_str})"
-
-
 class Booking(models.Model):
     """
     Booking can be made by a logged-in user or an anonymous user (if user is null).
@@ -71,7 +32,6 @@ class Booking(models.Model):
       - reservation_date: date/time for the booking
       - number_of_guests
       - special_requests: optional notes
-      - table: optional reference to a specific Table (if required)
       - created_on: auto timestamp
     """
 
@@ -88,14 +48,6 @@ class Booking(models.Model):
     reservation_date = models.DateTimeField()
     number_of_guests = models.PositiveIntegerField()
     special_requests = models.TextField(blank=True, null=True)
-    table = models.ForeignKey(
-        Table,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="bookings",
-        help_text="Select a table (optional) if you want to specify a specific table.",
-    )
     created_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:

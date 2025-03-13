@@ -1,4 +1,15 @@
 {% extends 'reservations/base.html' %}
+
+{% block background_style %}
+body {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+              url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=2000&q=80');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+{% endblock %}
+
 {% block title %}Create Booking{% endblock %}
 
 {% block content %}
@@ -167,17 +178,73 @@
     border-radius: 8px;
   }
 
+  /* Modal Styling */
+  .modal {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .modal-backdrop {
+    display: none;
+  }
+
+  .modal-dialog {
+    margin: 1.75rem auto;
+    max-width: 500px;
+  }
+
   .modal-content {
     border-radius: 15px;
     border: none;
+    background-color: #ffffff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
   }
 
   .modal-header {
     border-radius: 15px 15px 0 0;
+    background-color: #ffc107;
+    color: #000000;
+    border-bottom: 1px solid #dee2e6;
+    padding: 1rem 1.5rem;
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+    color: #212529;
+    background-color: #ffffff;
   }
 
   .modal-footer {
     border-radius: 0 0 15px 15px;
+    background-color: #f8f9fa;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #dee2e6;
+  }
+
+  .modal-title {
+    font-weight: 600;
+    color: #000000;
+  }
+
+  .modal .btn {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+  }
+
+  .modal .alert-info {
+    background-color: #e3f2fd;
+    border-color: #90caf9;
+    color: #0d47a1;
+  }
+
+  .modal p {
+    color: #212529;
+    margin-bottom: 1rem;
+  }
+
+  /* Fix for modal backdrop */
+  .modal.show {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.5);
   }
 </style>
 
@@ -211,7 +278,10 @@
     // Handle existing booking modal
     const existingBookingModal = document.getElementById('existingBookingModal');
     if (existingBookingModal) {
-      const modal = new bootstrap.Modal(existingBookingModal);
+      const modal = new bootstrap.Modal(existingBookingModal, {
+        backdrop: false,
+        keyboard: false
+      });
       const form = document.getElementById('bookingForm');
       const submitBtn = document.getElementById('submitBtn');
       const continueBtn = document.getElementById('continueBtn');
@@ -221,17 +291,20 @@
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         modal.show();
+        document.body.classList.add('modal-open');
       });
 
       // Handle continue button
       continueBtn.addEventListener('click', function() {
         modal.hide();
+        document.body.classList.remove('modal-open');
         form.submit();
       });
 
       // Handle cancel button
       cancelBtn.addEventListener('click', function() {
         modal.hide();
+        document.body.classList.remove('modal-open');
         window.location.href = "{% url 'home' %}";
       });
     }
