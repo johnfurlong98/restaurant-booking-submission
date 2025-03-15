@@ -75,7 +75,6 @@ if IS_HEROKU:
     DATABASES = {
         'default': dj_database_url.config(
             conn_max_age=600,
-            #conn_health_checks=True,
         )
     }
 else:
@@ -151,12 +150,10 @@ else:
 
 # Session settings
 SESSION_COOKIE_AGE = 86400  # 24 hours
-# SESSION_COOKIE_SECURE = False
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 
 # CSRF settings
-# CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_TRUSTED_ORIGINS = [
