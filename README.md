@@ -468,3 +468,5 @@ python manage.py createsuperuser
 [Install Heroku](image.png)
 [Heroku Login](image-1.png)
 [Create Heroku App](image-2.png)
+[Add Postgresql to Heroku](image-3.png)
+[Added Heroku Remote](image-4.png)
