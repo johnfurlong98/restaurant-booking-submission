@@ -3,7 +3,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from datetime import timedelta
+from datetime import datetime, timedelta
+from django.core.exceptions import ValidationError
 
 
 class RestaurantSettings(models.Model):
@@ -21,6 +22,63 @@ class RestaurantSettings(models.Model):
 
     def __str__(self):
         return f"Restaurant Settings (Open: {self.open_time}, Close: {self.close_time})"
+
+
+class Table(models.Model):
+    table_number = models.IntegerField(default=1)
+    capacity = models.IntegerField(default=4)
+
+    def __str__(self):
+        return f'Table {self.table_number} (Capacity: {self.capacity})'
+
+    def is_available(self, date, time):
+        if isinstance(time, str):
+            time = datetime.strptime(time, '%H:%M').time()
+        return not Reservation.objects.filter(
+            table=self,
+            reservation_date=date,
+            reservation_time=time,
+            status='confirmed'
+        ).exists()
+
+
+class Reservation(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('cancelled', 'Cancelled'),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    table = models.ForeignKey(Table, on_delete=models.CASCADE)
+    party_size = models.IntegerField()
+    reservation_date = models.DateField()
+    reservation_time = models.TimeField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'Reservation for {self.user.username} at Table {self.table.table_number}'
+
+    def clean(self):
+        # Skip validation if the reservation is being cancelled
+        if self.status == 'cancelled':
+            return
+
+        if self.party_size and self.table and self.party_size > self.table.capacity:
+            raise ValidationError('Party size cannot exceed table capacity')
+
+        if self.table and self.reservation_date and self.reservation_time:
+            if not self.table.is_available(self.reservation_date, self.reservation_time):
+                raise ValidationError('Table is not available at this time')
+
+        if self.reservation_date and self.reservation_date < timezone.now().date():
+            raise ValidationError('Cannot make reservations for past dates')
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
 
 class Booking(models.Model):

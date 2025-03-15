@@ -5,7 +5,10 @@ from django.contrib import messages
 
 @receiver(user_logged_in)
 def notify_user_logged_in(sender, request, user, **kwargs):
-    messages.success(request, f"Welcome back, {user.username}!")
+    try:
+        messages.success(request, f"Welcome back, {user.username}!", fail_silently=True)
+    except:
+        pass
 
 
 @receiver(user_logged_out)

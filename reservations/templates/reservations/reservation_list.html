@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>My Reservations</h1>
+    <div class="row">
+        {% for reservation in reservations %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Reservation at {{ reservation.table.restaurant.name }}</h5>
+                    <p class="card-text">Table: {{ reservation.table.table_number }}</p>
+                    <p class="card-text">Date: {{ reservation.reservation_date }}</p>
+                    <p class="card-text">Time: {{ reservation.reservation_time }}</p>
+                    <p class="card-text">Party Size: {{ reservation.party_size }}</p>
+                    <p class="card-text">Status: {{ reservation.status }}</p>
+                    {% if reservation.status == 'confirmed' %}
+                    <a href="{% url 'cancel_reservation' reservation.pk %}" class="btn btn-danger">Cancel Reservation</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col">
+            <p>You have no reservations.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

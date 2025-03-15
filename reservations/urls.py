@@ -11,6 +11,9 @@ from .views import (
     ReviewDeleteView,
     register_user,
     admin_dashboard,
+    ReservationListView,
+    ReservationCreateView,
+    ReservationCancelView,
 )
 
 urlpatterns = [
@@ -47,4 +50,8 @@ urlpatterns = [
     ),
     # User Registration
     path("accounts/register/", register_user, name="register_user"),
+    # Reservation URLs
+    path('reservations/', ReservationListView.as_view(), name='reservation_list'),
+    path('reservations/create/<int:table_id>/', ReservationCreateView.as_view(), name='create_reservation'),
+    path('reservations/cancel/<int:pk>/', ReservationCancelView.as_view(), name='cancel_reservation'),
 ]

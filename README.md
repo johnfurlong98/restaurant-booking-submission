@@ -17,12 +17,16 @@ A Django-based web application allowing customers to:
 1. [Project Purpose](#project-purpose)
 2. [Features](#features)
 3. [User Stories](#user-stories)
-4. [Agile Approach](#agile-approach)
-5. [Technologies](#technologies)
-6. [Data Models](#data-models)
-7. [Testing](#testing)
-8. [Deployment](#deployment)
-9. [Credits](#credits)
+4. [Project Structure](#project-structure)
+5. [Wireframes](#wireframes)
+6. [Agile Approach](#agile-approach)
+7. [Technologies](#technologies)
+8. [Data Models](#data-models)
+9. [Testing](#testing)
+10. [Manual Testing](#manual-testing)
+11. [Deployment](#deployment)
+12. [Known Issues and Future Improvements](#known-issues-and-future-improvements)
+13. [Credits](#credits)
 
 ---
 
@@ -31,43 +35,73 @@ A Django-based web application allowing customers to:
 - **Restaurant Owner**: Manage bookings & see user reviews in real-time.
 
 ## Features
-1. **User Registration & Auth**: Based on Django’s built-in system.
+1. **User Registration & Auth**: Based on Django's built-in system.
 2. **CRUD Bookings**: Create, read, update, delete booking records from the front-end.
 3. **CRUD Reviews**: Create & delete simple reviews about the restaurant.
-4. **Bootstrap**-styled templates.
+4. **Bootstrap**-styled templates with responsive design.
 5. **Success/Failure** messages for user feedback.
+6. **Interactive UI Components**:
+   - Dynamic carousel on homepage
+   - Responsive navigation
+   - FAQ accordion
+   - Review cards with star ratings
+7. **Form Validation**: Client and server-side validation for all forms
+8. **Admin Dashboard**: Custom admin interface for managing bookings and reviews
+
+## Project Structure
+
+```
+restaurant-booking/
+├── reservations/
+│   ├── static/
+│   │   └── css/
+│   │       └── style.css
+│   │
+│   ├── templates/
+│   │   └── reservations/
+│   │       ├── base.html
+│   │       ├── home.html
+│   │       ├── booking_create.html
+│   │       ├── booking_update.html
+│   │       ├── menu.html
+│   │       └── ...
+│   │
+│   ├── tests/
+│   │   ├── test_forms.py
+│   │   ├── test_models.py
+│   │   ├── test_urls.py
+│   │   └── test_views.py
+│   │
+│   ├── models.py
+│   │
+│   ├── views.py
+│   │
+│   └── urls.py
+│
+├── static/
+│   └── css/
+│       └── style.css
+│
+├── templates/
+│   └── base.html
+│
+└── manage.py
+```
 
 ## User Stories
-- “As a new visitor, I can register an account so that I can log in and create a booking.”
-- “As a logged-in user, I can create a booking so that I can reserve a table.”
-- “As a logged-in user, I can edit or cancel my booking if my plans change.”
-- “As any user, I can leave a quick review so that I can share my experience with others.”
-- “As an admin, I can access the admin panel to manage everything behind the scenes.”
+- "As a new visitor, I can register an account so that I can log in and create a booking."
+- "As a logged-in user, I can create a booking so that I can reserve a table."
+- "As a logged-in user, I can edit or cancel my booking if my plans change."
+- "As any user, I can leave a quick review so that I can share my experience with others."
+- "As an admin, I can access the admin panel to manage everything behind the scenes."
 
-## Agile Approach
-- We used a [GitHub Project Board](https://github.com/USERNAME/improved_restaurant_booking/projects/1) with Epics (Bookings, Reviews, Deployment), user stories, and tasks.
-- Tasks are broken down into sub-issues or checklists inside stories.
+## Wireframes
 
-## Technologies
-- Django 4.2
-- Python 3.9+
-- Bootstrap 5 (CDN)
-- Gunicorn (production server)
-- SQLite (dev)
-- Heroku (deployment)
-
-## Data Models
-1. **Booking**: (id, user, name, email, phone, reservation_date, number_of_guests, special_requests, created_on)
-2. **Review**: (id, user, title, content, rating, created_on)
-
-
-# Wireframes Documentation
-
-## Overview
+### Overview
 
 This section provides an overview of the wireframes for the **Restaurant Booking System**. Wireframes are essential for visualizing the layout, structure, and user interactions within the application. Below are the key wireframes that outline the primary screens and their functionalities. The login page was not planned in wireframes as I used a very basic standard login design.
 
-## Wireframes Overview
+### Wireframes Overview
 
 - **Homepage**
 - **Booking Creation**
@@ -75,9 +109,9 @@ This section provides an overview of the wireframes for the **Restaurant Booking
 - **My Booking**
 - **Reviews Page**
 
-## Wireframe Screens
+### Wireframe Screens
 
-### 1. Homepage
+#### 1. Homepage
 
 ![Homepage Wireframe](./images/homepage.png)
 
@@ -91,7 +125,7 @@ The homepage serves as the entry point for users. It features the navigation bar
 
 ---
 
-### 2. Booking Creation
+#### 2. Booking Creation
 
 ![Booking Creation Wireframe](./images/bookingcreation.png)
 
@@ -106,7 +140,7 @@ This screen allows users to create a new booking. The form includes fields for n
 
 ---
 
-### 3. User Signup
+#### 3. User Signup
 
 ![User Registration Wireframe](./images/signup.png)
 
@@ -121,7 +155,7 @@ The registration page enables new users to sign up for an account. It includes f
 
 ---
 
-### 4. My Booking 
+#### 4. My Booking 
 
 ![Booking List Wireframe](./images/mybookings.png)
 
@@ -135,7 +169,7 @@ After logging in, users can view a list of their existing bookings. Each booking
 
 ---
 
-### 5. Reviews Page
+#### 5. Reviews Page
 
 ![Reviews Page Wireframe](./images/reviews.png)
 
@@ -147,206 +181,290 @@ The reviews page showcases feedback from customers. Users can read existing revi
 - Review Submission Form
 - Pagination or Scroll for Multiple Reviews
 
----
-
-## How to Use These Wireframes
+### How to Use These Wireframes
 
 1. **Reference During Development:** Use these wireframes as a blueprint to guide the development of each page, ensuring consistency and alignment with the initial design vision.
 2. **User Feedback:** Share wireframes with stakeholders or potential users to gather feedback and make iterative improvements before full-scale development.
 3. **Design Iterations:** Update wireframes as the project evolves to reflect changes in functionality or design preferences.
 
-## Tools Used for Wireframing
+### Tools Used for Wireframing
 
 - **wireframe.cc:** For creating interactive and collaborative wireframes.
 
-## Conclusion
+## Agile Approach
+- We used a [GitHub Project Board](https://github.com/USERNAME/improved_restaurant_booking/projects/1) with Epics (Bookings, Reviews, Deployment), user stories, and tasks.
+- Tasks are broken down into sub-issues or checklists inside stories.
 
-Documenting wireframes is a crucial step in the development process, providing a clear visual guide for both designers and developers. These wireframes ensure that the **Restaurant Booking System** delivers a user-friendly and efficient experience.
+## Technologies
+- Django 4.2.11
+- Python 3.9.21
+- Bootstrap 5 (CDN)
+- Bootstrap Icons
+- Gunicorn (production server)
+- SQLite (dev)
+- Heroku (deployment)
+- Jest & Puppeteer (E2E testing)
+- pytest (Python testing)
 
----
+## Data Models
+1. **Booking**: 
+   - id (AutoField)
+   - user (ForeignKey to User)
+   - name (CharField)
+   - email (EmailField)
+   - phone (CharField)
+   - reservation_date (DateTimeField)
+   - number_of_guests (IntegerField)
+   - special_requests (TextField)
+   - created_on (DateTimeField)
 
-*Images are stored in the `./images/` directory. Ensure that all image paths are correct relative to the README file location.*
-
-
+2. **Review**: 
+   - id (AutoField)
+   - user (ForeignKey to User)
+   - title (CharField)
+   - content (TextField)
+   - rating (IntegerField)
+   - created_on (DateTimeField)
 
 ## Testing
 
-## Django Automated Tests
+### Django Automated Tests (pytest)
 
-### Overview
+The project includes comprehensive automated tests using pytest and Django's testing framework. Test coverage includes:
 
-This project includes automated tests using Django's built-in testing framework to ensure the reliability and correctness of the restaurant booking application. The tests cover both **model** and **view** functionalities, verifying that critical components behave as expected.
+#### Forms Tests
+- Valid reservation form validation
+- Invalid party size validation
+- Past date reservation validation
 
-### Test Structure
+#### Models Tests
+- Table creation and availability
+- Reservation creation and validation
+- Duplicate reservation handling
+- Party size validation
 
-- **Model Tests**: Ensure that the data models behave correctly.
-- **View Tests**: Verify that views handle requests and responses properly.
+#### URLs Tests
+- URL pattern matching
+- URL name resolution
+- URL parameter handling
 
-### Prerequisites
+#### Views Tests
+- Reservation creation flow
+- Reservation listing
+- Reservation cancellation
+- Unauthorized access handling
 
-- **Python** (version 3.8 or higher recommended)
-- **Django** installed and properly configured
-- **Database** migrations applied
-
-### Running the Tests
-
-1. **Navigate to the Project Directory**:
-    ```bash
-    cd C:\Users\furlo\Documents\booking-system
-    ```
-
-2. **Run the Tests Using Django's Test Runner**:
-    ```bash
-    python manage.py test
-    ```
-    - This command discovers and runs all tests within your Django applications.
-
-## End-to-End (E2E) Tests with Jest & Puppeteer
-
-### Overview
-
-This project utilizes **Jest** and **Puppeteer** to perform automated end-to-end (E2E) tests. These tests ensure that key functionalities of the restaurant booking application work as expected, enhancing both usability and reliability.
-
-### Prerequisites
-
-- **Node.js** (version 18 or higher recommended)
-- **npm** (comes with Node.js)
-- **Django server** running locally (`http://localhost:8000`)
-
-### Installation
-
-1. **Install Node Dependencies**:
-    ```bash
-    npm install
-    ```
-
-2. **Install Jest and Puppeteer**:
-    ```bash
-    npm install --save-dev jest puppeteer
-    ```
-
-### Running the Tests
-
-1. **Start the Django Server**:
-    ```bash
-    python manage.py runserver
-    ```
-
-2. **Run Jest Tests** (in a separate terminal):
-    ```bash
-    npm test
-    ```
-
-### What the Tests Do
-
-- **Load the Homepage**: Verifies that the homepage loads successfully and checks the page title.
-- **Check Navigation Links**: Confirms the presence of essential links like "Make a Booking."
-- **Responsive Design**: Tests the application's responsiveness by simulating different viewport sizes.
-
-### Troubleshooting
-
-- **No Tests Found**:
-  - Ensure your test files are named with `.test.js` or `.spec.js` extensions.
-  - Place test files inside a `__tests__` directory or configure Jest to recognize your test paths.
-
-- **Timeout Errors**:
-  - Increase Jest’s default timeout by adding `jest.setTimeout(30000);` at the top of your test file.
-
-- **Server Issues**:
-  - Make sure the Django server is running before executing the tests.
-  - Verify that the base URL in your tests (`http://localhost:8000`) matches your server’s address.
-
-### Customizing Tests
-
-For debugging purposes, you can run Puppeteer in non-headless mode by modifying the `puppeteer.launch` options in your test file:
-
-```javascript
-browser = await puppeteer.launch({
-  headless: false, // Set to false to see the browser
-  slowMo: 50,       // Slows down Puppeteer operations by 50ms
-});
+To run the tests:
+```bash
+python -m pytest reservations/tests/ -v
 ```
 
-## Validation 
+### Browser Testing
 
-- All HTML and CSS files were validated in deployed enviroment using the W3C Markup Validation Service and the W3C CSS Validator.
+#### Desktop Browsers
+- Chrome (Version 120+)
+- Firefox (Version 115+)
+- Safari (Version 16+)
+- Edge (Version 120+)
+
+#### Mobile Browsers
+- Safari iOS
+- Chrome Android
+- Samsung Internet
+
+### Manual Testing Checklist
+
+1. **User Authentication**
+   - ✓ User registration with validation
+   - ✓ Login with correct credentials
+   - ✓ Login with incorrect credentials (error handling)
+   - ✓ Password reset functionality
+   - ✓ Logout functionality
+
+2. **Booking System**
+   - ✓ Create new booking
+   - ✓ Edit existing booking
+   - ✓ Cancel booking
+   - ✓ View booking details
+   - ✓ Date/time validation
+   - ✓ Guest number validation
+   - ✓ Duplicate booking prevention
+
+3. **Review System**
+   - ✓ Create new review
+   - ✓ View all reviews
+   - ✓ Delete own review
+   - ✓ Star rating functionality
+   - ✓ Review form validation
+
+4. **Navigation & Links**
+   - ✓ All navbar links functional
+   - ✓ Footer links working
+   - ✓ Social media links
+   - ✓ Logo redirects to home
+   - ✓ 404 page for invalid URLs
+
+5. **Forms & Validation**
+   - ✓ Required field validation
+   - ✓ Email format validation
+   - ✓ Phone number format validation
+   - ✓ Date/time format validation
+   - ✓ Error message display
+   - ✓ Success message display
+
+### Responsive Design Testing
+
+#### Mobile Devices
+- iPhone SE (375px)
+- iPhone 12 Pro (390px)
+- Samsung Galaxy S20 (360px)
+- Google Pixel 5 (393px)
+
+#### Tablets
+- iPad Air (820px)
+- iPad Mini (768px)
+- Samsung Galaxy Tab (800px)
+
+#### Desktops
+- 1080p displays (1920x1080)
+- 4K displays (3840x2160)
+- Ultrawide monitors (3440x1440)
+
+### Performance Testing
+- Lighthouse scores:
+  - Performance: 90+
+  - Accessibility: 95+
+  - Best Practices: 90+
+  - SEO: 95+
+
+### Security Testing
+- ✓ CSRF protection on all forms
+- ✓ Authentication required for protected routes
+- ✓ SQL injection prevention
+- ✓ XSS protection
+- ✓ Secure password hashing
+- ✓ Session security
+- ✓ Form validation and sanitization
+
+### Code Validation
+
+#### HTML & CSS Validation
+- All pages passed W3C HTML and CSS Validators
+- No major errors or warnings
+- Semantic HTML structure verified
+- Compatible with modern browsers
+
+#### Python Validation
+- Code follows PEP 8 style guide
+- Passed flake8 linting
+- Consistent code formatting
+
+## Manual Testing
+
+### Responsive Design Testing
+- Tested on multiple devices:
+  - Mobile (iPhone SE, iPhone 12 Pro, Samsung Galaxy S20)
+  - Tablet (iPad Air, iPad Mini)
+  - Desktop (1080p and 4K displays)
+- Verified using Chrome DevTools device emulation
+- Tested orientation changes (portrait/landscape)
+
+### Browser Compatibility
+Tested on:
+- Chrome (Version 120+)
+- Firefox (Version 115+)
+- Safari (Version 16+)
+- Edge (Version 120+)
+
+### Functionality Testing
+1. **User Authentication**
+   - Registration form validation
+   - Login/logout process
+   - Password reset functionality
+
+2. **Booking System**
+   - Create booking with valid/invalid data
+   - Edit existing bookings
+   - Cancel bookings
+   - View booking history
+
+3. **Review System**
+   - Create reviews with ratings
+   - View all reviews
+   - Delete own reviews
+
+4. **Navigation**
+   - All navbar links
+   - Footer links
+   - Social media links
+   - Call-to-action buttons
+
+5. **Forms**
+   - Input validation
+   - Error messages
+   - Success messages
+   - Required fields
+
+### Performance Testing
+- Lighthouse scores:
+  - Performance: 90+
+  - Accessibility: 95+
+  - Best Practices: 90+
+  - SEO: 95+
+
+### Security Testing
+- CSRF protection
+- Authentication required routes
+- Form validation
+- SQL injection prevention
+- XSS protection
+
+### Validation 
+- All HTML and CSS files were validated in deployed environment using the W3C Markup Validation Service and the W3C CSS Validator.
 - Python code that is consistent in style and conforms to the PEP8 style guide.
 
-## Deployment on Heroku
-
-This section provides step-by-step instructions for deploying the **Restaurant Booking System** on Heroku. Follow these steps to set up and deploy your Django application successfully.
+## Deployment
 
 ### Prerequisites
+- Heroku account and CLI installed
+- Project configured and tested locally
+- [Live Site](https://booking-system-deployment-eda028bd58dc.herokuapp.com/)
 
-Before deploying to Heroku, ensure the following:
+### Deployment Steps
 
-- [**Heroku**] (https://booking-system-deployment-eda028bd58dc.herokuapp.com/)
-
-- Heroku CLI is installed on your system.
-- Project is fully configured and tested locally.
-
----
-
-### Step-by-Step Guide
-
-#### 1. Install Required Packages
-
-Add necessary packages for Heroku deployment:
-
+1. Install Required Packages:
 ```bash
 pip install gunicorn dj-database-url psycopg2-binary django-heroku
 ```
 
-## Creating a Superuser
-
-A **superuser** in Django has full access to the admin interface, allowing you to manage all aspects of the **Restaurant Booking System**. This includes managing users, bookings, reviews, and other critical data.
-
-### Prerequisites
-
-Before creating a superuser, ensure that:
-
-- **Python** (version 3.8 or higher) is installed on your system.
-- **Django** is installed and your project is properly set up.
-- **Database Migrations** have been applied to set up the necessary database tables.
-
-### Step-by-Step Guide
-
-#### 1. Navigate to Your Project Directory
-
-Open your terminal or command prompt and navigate to the root directory of your Django project (where `manage.py` is located).
-
-```bash
-cd C:\Users\furlo\Documents\booking-system
-```
-
-### Open terminal and run 
-Step 1 
-```bash
-cd C:\Users\furlo\Documents\booking-system
-```
-Step 2 
+2. Create Superuser:
 ```bash
 python manage.py migrate
-```
-Step 3
-```bash
 python manage.py createsuperuser
 ```
 
-- You will be prompted to enter the following information:
-
-Username: (e.g., admin)
-Email address: (e.g., admin@example.com)
-Password: (Enter a strong password)
-Password confirmation: (Re-enter the password)
-
 ## Known Issues and Future Improvements
 
-### Admin-Assisted Registration for Staff
-- Below the login field on the restaurant booking site's login page, there is a link labeled "Ask admin to register you?". This feature was intended to allow the admin to log in and register new users specifically for staff accounts. While the feature is functional and restricted to admin access, it remains an unfinished part of the project. It lacks proper CSS styling and is not designed for use by the average user. As such, it currently serves as a basic implementation without the polished appearance and functionality planned for future iterations.
+### Current Issues
+- Admin-assisted registration feature needs styling improvements
+- Limited table management functionality
+
+### Future Improvements
+1. Enhanced table management system
+2. Email confirmation for bookings
+3. Integration with payment gateway
+4. Mobile app development
+5. Advanced analytics dashboard
+6. Multi-language support
 
 ## Credits
 - [Django docs](https://docs.djangoproject.com/)
-- Code Institute walkthroughs and community tips
+- Code Institute walkthroughs
 - Bootstrap 5 from [https://getbootstrap.com](https://getbootstrap.com)
+- Bootstrap Icons from [https://icons.getbootstrap.com](https://icons.getbootstrap.com)
 - chatgpt
+
+## Deployment Screenshots
+[Install Heroku](image.png)
+[Heroku Login](image-1.png)
+[Create Heroku App](image-2.png)

@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Booking, Review, RestaurantSettings
+from .models import Booking, Review, Reservation, Table
 import re
 
 
@@ -108,3 +108,40 @@ class CustomUserCreationForm(UserCreationForm):
             "password1": forms.PasswordInput(attrs={"class": "form-control"}),
             "password2": forms.PasswordInput(attrs={"class": "form-control"}),
         }
+
+
+class ReservationForm(forms.ModelForm):
+    class Meta:
+        model = Reservation
+        fields = ['party_size', 'reservation_date', 'reservation_time']
+        widgets = {
+            'reservation_date': forms.DateInput(attrs={'type': 'date'}),
+            'reservation_time': forms.TimeInput(attrs={'type': 'time'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.table = kwargs.pop('table', None)
+        super().__init__(*args, **kwargs)
+        if self.table:
+            self.instance.table = self.table
+
+    def clean(self):
+        cleaned_data = super().clean()
+        party_size = cleaned_data.get('party_size')
+        reservation_date = cleaned_data.get('reservation_date')
+        reservation_time = cleaned_data.get('reservation_time')
+
+        if not self.table:
+            raise ValidationError('Table is required')
+
+        if party_size and party_size > self.table.capacity:
+            self.add_error('party_size', 'Party size cannot exceed table capacity')
+
+        if reservation_date and reservation_date < timezone.now().date():
+            self.add_error('reservation_date', 'Cannot make reservations for past dates')
+
+        if self.table and reservation_date and reservation_time:
+            if not self.table.is_available(reservation_date, reservation_time):
+                self.add_error('reservation_time', 'Table is not available at this time')
+
+        return cleaned_data

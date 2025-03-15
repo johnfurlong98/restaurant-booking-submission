@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Cancel Reservation</h1>
+            <p class="card-text">Are you sure you want to cancel your reservation at {{ object.table.restaurant.name }}?</p>
+            <p class="card-text">Date: {{ object.reservation_date }}</p>
+            <p class="card-text">Time: {{ object.reservation_time }}</p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
+                <a href="{% url 'reservation_list' %}" class="btn btn-secondary">Go Back</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

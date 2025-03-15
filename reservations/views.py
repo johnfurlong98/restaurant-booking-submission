@@ -13,8 +13,8 @@ from django.views.generic import (
 )
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Booking, Review
-from .forms import BookingForm, ReviewForm, CustomUserCreationForm
+from .models import Booking, Review, Table, Reservation
+from .forms import BookingForm, ReviewForm, CustomUserCreationForm, ReservationForm
 from .mixins import StaffOrOwnerMixin, SuccessMessageMixin, ErrorMessageMixin
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
@@ -24,6 +24,7 @@ from django.contrib.auth.models import User
 from django.db.models import Avg, Count
 from django.utils import timezone
 from datetime import timedelta
+from django.http import HttpResponseRedirect
 
 
 def home(request):
@@ -31,7 +32,8 @@ def home(request):
     Landing page. Anyone can create a booking from "Make a Booking",
     or they can register/log in if they want advanced features.
     """
-    return render(request, "reservations/home.html")
+    all_reviews = Review.objects.select_related('user').order_by('-created_on')
+    return render(request, "reservations/home.html", {'all_reviews': all_reviews})
 
 
 # ==============
@@ -233,3 +235,54 @@ def admin_dashboard(request):
     }
     
     return render(request, 'reservations/admin_dashboard.html', context)
+
+
+# ==============
+#   RESERVATIONS
+# ==============
+class ReservationListView(LoginRequiredMixin, ListView):
+    model = Reservation
+    template_name = 'reservations/reservation_list.html'
+    context_object_name = 'reservations'
+
+    def get_queryset(self):
+        return Reservation.objects.filter(user=self.request.user)
+
+
+class ReservationCreateView(LoginRequiredMixin, CreateView):
+    model = Reservation
+    form_class = ReservationForm
+    template_name = 'reservations/reservation_form.html'
+    success_url = reverse_lazy('reservation_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['table'] = get_object_or_404(Table, pk=self.kwargs['table_id'])
+        return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['table'] = get_object_or_404(Table, pk=self.kwargs['table_id'])
+        return kwargs
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+class ReservationCancelView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = Reservation
+    fields = ['status']
+    template_name = 'reservations/reservation_cancel.html'
+    success_url = reverse_lazy('reservation_list')
+    success_message = "Reservation cancelled successfully!"
+
+    def get_queryset(self):
+        return Reservation.objects.filter(user=self.request.user)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.status = 'cancelled'
+        self.object.save()
+        messages.success(request, self.success_message)
+        return HttpResponseRedirect(self.success_url)
