@@ -75,7 +75,7 @@ if IS_HEROKU:
     DATABASES = {
         'default': dj_database_url.config(
             conn_max_age=600,
-            conn_health_checks=True,
+            #conn_health_checks=True,
         )
     }
 else:
@@ -159,4 +159,9 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 # CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = 'Lax'
-# CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.herokuapp.com',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'https://restaurant-booking-app2025-7914b884c356.herokuapp.com'
+]
