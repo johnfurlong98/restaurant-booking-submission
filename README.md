@@ -428,7 +428,7 @@ Tested on:
 ### Prerequisites
 - Heroku account and CLI installed
 - Project configured and tested locally
-- [Live Site](https://booking-system-deployment-eda028bd58dc.herokuapp.com/)
+- [Live Site](https://restaurant-booking-app2025-7914b884c356.herokuapp.com)
 
 ### Deployment Steps
 
@@ -475,4 +475,5 @@ python manage.py createsuperuser
 [Heroku push image1](image-7.png)
 [Heroku push image2](image-8.png)
 [Run Migrations on Heroku](image-9.png)
-![Fixed Postgresql in current plan](image-10.png)
+[Fixed Postgresql in current plan](image-10.png)
+[Open Heroku live app](image-11.png)
